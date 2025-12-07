@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package main;
-import vista.Login;
+import vista.LoginForm;
 
 /**
  *
@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         
         java.awt.EventQueue.invokeLater(() -> {
-            Login loginForm = new Login();
+            LoginForm loginForm = new LoginForm();
             loginForm.setVisible(true);
             loginForm.setLocationRelativeTo(null);
         });
