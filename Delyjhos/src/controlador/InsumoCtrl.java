@@ -15,6 +15,7 @@ import modelo.entidad.Insumo;
  * @author jhery
  */
 public class InsumoCtrl {
+
     private InsumoDAO insumoDAO;
 
     public InsumoCtrl() {
@@ -23,7 +24,7 @@ public class InsumoCtrl {
 
     // Metodo para AGREGAR un insumo (Lo llamara la Vista)
     public boolean agregarInsumo(String nombre, String descripcion, String unidad, double stock, double stockMinimo, Date fechaCaducidad, String estado) {
-        
+
         if (nombre.isEmpty() || unidad.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nombre y Unidad son obligatorios.", "Error de Validacion", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -58,29 +59,11 @@ public class InsumoCtrl {
         // Simplemente llama al DAO y devuelve la lista
         return insumoDAO.listarInsumos();
     }
-    
+
     // Metodo para ACTUALIZAR un insumo (Lo llamara la Vista)
-    public boolean actualizarInsumo(int id, String nombre, String descripcion, String unidad, double stock, double stockMinimo, Date fechaCaducidad, String estado) {
-        
-        // (Aqui van validaciones similares a las de agregar)
+    public boolean actualizarInsumo(Insumo ins) {
 
-        Insumo insumo = new Insumo();
-        insumo.setId_insumo(id);
-        insumo.setNombre(nombre);
-        insumo.setDescripcion(descripcion);
-        insumo.setUnidad_medida(unidad);
-        insumo.setStock_actual(stock);
-        insumo.setStock_minimo(stockMinimo);
-        insumo.setFecha_caducidad(fechaCaducidad);
-        insumo.setEstado(estado);
-
-        if (insumoDAO.actualizarInsumo(insumo)) {
-            JOptionPane.showMessageDialog(null, "Insumo actualizado exitosamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al actualizar el insumo.", "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+        return insumoDAO.actualizarInsumo(ins);
     }
 
     // Método para ELIMINAR un insumo (Lo llamara la Vista)
@@ -93,5 +76,9 @@ public class InsumoCtrl {
             return false;
         }
     }
-    
+
+    public Insumo obtenerInsumoPorId(int id) {
+        return insumoDAO.obtenerInsumoPorId(id);
+    }
+
 }

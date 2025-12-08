@@ -152,4 +152,42 @@ public class InsumoDAO {
         }
     }
     
+    public Insumo obtenerInsumoPorId(int id) {
+    String sql = "SELECT * FROM INSUMO WHERE id_insumo = ?";
+    
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+
+    try {
+        stmt = cnn.prepareStatement(sql);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            Insumo insumo = new Insumo();
+            insumo.setId_insumo(rs.getInt("id_insumo"));
+            insumo.setNombre(rs.getString("nombre"));
+            insumo.setDescripcion(rs.getString("descripcion"));
+            insumo.setUnidad_medida(rs.getString("unidad_medida"));
+            insumo.setStock_actual(rs.getDouble("stock_actual"));
+            insumo.setStock_minimo(rs.getDouble("stock_minimo"));
+            insumo.setFecha_caducidad(rs.getDate("fecha_caducidad"));
+            insumo.setEstado(rs.getString("estado"));
+
+            return insumo;
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Error al obtener insumo por ID: " + e.getMessage());
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+        } catch (SQLException e) {}
+    }
+
+    return null;
+}
+
+    
 }
