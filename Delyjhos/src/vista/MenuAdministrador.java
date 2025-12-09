@@ -5,11 +5,15 @@
 package vista;
 
 import controlador.InsumoCtrl;
+import controlador.MovimientoCtrl;
 import controlador.ProveedorCtrl;
+import java.awt.print.PrinterException;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.entidad.Insumo;
+import modelo.entidad.MovimientoInventario;
 import modelo.entidad.Proveedor;
 
 /**
@@ -37,14 +41,14 @@ public class MenuAdministrador extends javax.swing.JFrame {
         aplicarEstiloMenu(btnReportes);
         //Botones
         java.awt.Color temaInsumos = new java.awt.Color(255, 105, 180); // Rosado Fuerte
-        
+
         diseñoBotonModulo(jButtonAgregarInsumo, temaInsumos);
         diseñoBotonModulo(btnActualizar, temaInsumos);
         diseñoBotonModulo(btnEditarInsumo, temaInsumos);
         diseñoBotonModulo(btnEliminarInsumo, temaInsumos);
 
         java.awt.Color temaProv = new java.awt.Color(147, 112, 219); // Lavanda
-        
+
         diseñoBotonModulo(btnAgregarProveedor, temaProv);
         diseñoBotonModulo(btnActualizarProveedor, temaProv);
         diseñoBotonModulo(btnEditarProveedor, temaProv);
@@ -143,7 +147,22 @@ public class MenuAdministrador extends javax.swing.JFrame {
         btnEliminarProveedor = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
+        cmbInsumosMovimiento = new javax.swing.JComboBox<>();
+        lblStockDisponible = new javax.swing.JLabel();
+        txtCantidadMovimiento = new javax.swing.JTextField();
+        cmbTipoMovimiento = new javax.swing.JComboBox<>();
+        btnRegistrarMovimiento = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
+        cmbTipoReporte = new javax.swing.JComboBox<>();
+        fechaInicio = new com.toedter.calendar.JDateChooser();
+        fechaFin = new com.toedter.calendar.JDateChooser();
+        btnGenerarReporte = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaReporte = new javax.swing.JTable();
+        btnImprimirReporte = new javax.swing.JButton();
+        btnExportarReporte = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -194,6 +213,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         btnInventario.setMinimumSize(new java.awt.Dimension(127, 23));
         btnInventario.setOpaque(true);
         btnInventario.setPreferredSize(new java.awt.Dimension(127, 23));
+        btnInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventarioActionPerformed(evt);
+            }
+        });
 
         btnPedidos.setBackground(new java.awt.Color(255, 204, 204));
         btnPedidos.setForeground(new java.awt.Color(60, 63, 65));
@@ -219,6 +243,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         btnReportes.setFocusPainted(false);
         btnReportes.setOpaque(true);
         btnReportes.setPreferredSize(new java.awt.Dimension(127, 23));
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
+            }
+        });
 
         btnProduccion.setBackground(new java.awt.Color(255, 204, 204));
         btnProduccion.setForeground(new java.awt.Color(60, 63, 65));
@@ -467,28 +496,138 @@ public class MenuAdministrador extends javax.swing.JFrame {
 
         panelContenido.add(jPanel4, "cardPedidos");
 
+        cmbInsumosMovimiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbInsumosMovimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbInsumosMovimientoActionPerformed(evt);
+            }
+        });
+
+        cmbTipoMovimiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Consumo en Producción", "Venta", "Merma" }));
+
+        btnRegistrarMovimiento.setText("Registrar");
+        btnRegistrarMovimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarMovimientoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 879, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(cmbInsumosMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(lblStockDisponible, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtCantidadMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cmbTipoMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnRegistrarMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(231, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 648, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRegistrarMovimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(cmbTipoMovimiento)
+                    .addComponent(txtCantidadMovimiento)
+                    .addComponent(lblStockDisponible, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbInsumosMovimiento))
+                .addContainerGap(538, Short.MAX_VALUE))
         );
 
         panelContenido.add(jPanel5, "cardInventario");
+
+        cmbTipoReporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnGenerarReporte.setText("Generar Reporte");
+        btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarReporteActionPerformed(evt);
+            }
+        });
+
+        tablaReporte.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tablaReporte);
+
+        btnImprimirReporte.setText("Imprimir");
+        btnImprimirReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirReporteActionPerformed(evt);
+            }
+        });
+
+        btnExportarReporte.setText("Exportar");
+
+        jLabel2.setText("Fecha Inicio");
+
+        jLabel3.setText("Fecha fin");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 879, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(cmbTipoReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(65, 65, 65)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, Short.MAX_VALUE)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fechaInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fechaFin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33)
+                        .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(75, 75, 75)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnImprimirReporte, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(btnExportarReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(203, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 648, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbTipoReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fechaInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(btnImprimirReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExportarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         panelContenido.add(jPanel6, "cardReportes");
@@ -568,10 +707,10 @@ public class MenuAdministrador extends javax.swing.JFrame {
         int id = Integer.parseInt(jTableInsumos.getValueAt(fila, 0).toString());
 
         int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "¿Seguro que deseas eliminar este insumo?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION
+                this,
+                "¿Seguro que deseas eliminar este insumo?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
@@ -586,6 +725,52 @@ public class MenuAdministrador extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnEliminarInsumoActionPerformed
+
+    private void cargarTiposDeReporte() {
+        cmbTipoReporte.removeAllItems();
+        cmbTipoReporte.addItem("Stock Actual");
+        cmbTipoReporte.addItem("Movimientos de Insumos");
+        cmbTipoReporte.addItem("Insumos Próximos a Caducar");
+    }
+
+    private void configurarPanelReportes() {
+        // NO cambiar layout → dejar el que NetBeans ya creó
+        // Solo actualizar los combos
+        cmbTipoReporte.removeAllItems();
+        cmbTipoReporte.addItem("Stock Actual");
+        cmbTipoReporte.addItem("Movimientos de Insumos");
+        cmbTipoReporte.addItem("Insumos Próximos a Caducar");
+        cmbTipoReporte.addItem("Compras a Proveedores");
+        cmbTipoReporte.addItem("Ventas de Productos");
+
+        // Repintar
+        jPanel6.revalidate();
+        jPanel6.repaint();
+    }
+// Ejemplo básico de generarReporte
+
+    private void generarReporte() {
+        String tipo = cmbTipoReporte.getSelectedItem().toString();
+
+        String fechaIni = "";
+        String fechaFinStr = "";
+
+        if (fechaInicio.getDate() != null) {
+            fechaIni = new java.text.SimpleDateFormat("yyyy-MM-dd").format(fechaInicio.getDate());
+        }
+        if (fechaFin.getDate() != null) {
+            fechaFinStr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(fechaFin.getDate());
+        }
+
+        // Aquí debes llenar la tabla según tipo y fechas
+        // Datos simulados
+        String[] columnas = {"Columna 1", "Columna 2", "Columna 3"};
+        Object[][] datos = {
+            {"Dato 1", "Dato 2", "Dato 3"},
+            {"Dato A", "Dato B", "Dato C"}
+        };
+        tablaReporte.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
+    }
 
     private void btnAgregarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProveedorActionPerformed
         new AgregarProveedorForm(this).setVisible(true);
@@ -619,10 +804,10 @@ public class MenuAdministrador extends javax.swing.JFrame {
         int id = Integer.parseInt(jTableProveedores.getValueAt(fila, 0).toString());
 
         int conf = JOptionPane.showConfirmDialog(
-            this,
-            "¿Seguro que deseas eliminar este proveedor?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION
+                this,
+                "¿Seguro que deseas eliminar este proveedor?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
         );
 
         if (conf == JOptionPane.YES_OPTION) {
@@ -639,27 +824,213 @@ public class MenuAdministrador extends javax.swing.JFrame {
         layout.show(panelContenido, "cardProveedores");
     }//GEN-LAST:event_btnProveedoresActionPerformed
 
+    private java.util.List<modelo.entidad.Insumo> listaInsumosParaMovimiento;
+    private modelo.entidad.Usuario usuarioLogueado;
+
+    private void cargarComboInsumosMovimiento() {
+        listaInsumosParaMovimiento = new java.util.ArrayList<>();
+        controlador.InsumoCtrl ctrl = new controlador.InsumoCtrl();
+        listaInsumosParaMovimiento = ctrl.listarInsumos();
+
+        cmbInsumosMovimiento.removeAllItems();
+        for (modelo.entidad.Insumo ins : listaInsumosParaMovimiento) {
+            String texto = ins.getId_insumo() + " - " + ins.getNombre() + " (stock: " + ins.getStock_actual() + " " + ins.getUnidad_medida() + ")";
+            cmbInsumosMovimiento.addItem(texto);
+        }
+
+        lblStockDisponible.setText("Stock: 0");
+    }
+
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
-        this, 
-        "¿Estás seguro de que deseas cerrar sesión?", 
-        "Cerrar Sesión", 
-        javax.swing.JOptionPane.YES_NO_OPTION, 
-        javax.swing.JOptionPane.QUESTION_MESSAGE
-    );
+                this,
+                "¿Estás seguro de que deseas cerrar sesión?",
+                "Cerrar Sesión",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.QUESTION_MESSAGE
+        );
 
-    if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
-        this.dispose();
-        LoginForm login = new LoginForm();
-        login.setVisible(true);
-        login.setLocationRelativeTo(null);
-    }
+        if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+            this.dispose();
+            LoginForm login = new LoginForm();
+            login.setVisible(true);
+            login.setLocationRelativeTo(null);
+        }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
-    
-    
+
+    private void dsf(java.awt.event.ActionEvent evt) {
+        int idx = cmbInsumosMovimiento.getSelectedIndex();
+        if (idx >= 0 && idx < listaInsumosParaMovimiento.size()) {
+            modelo.entidad.Insumo ins = listaInsumosParaMovimiento.get(idx);
+            lblStockDisponible.setText(String.format("Stock: %.2f %s", ins.getStock_actual(), ins.getUnidad_medida()));
+        } else {
+            lblStockDisponible.setText("Stock: 0");
+        }
+    }
+
+    private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
+        java.awt.CardLayout layout = (java.awt.CardLayout) panelContenido.getLayout();
+        layout.show(panelContenido, "cardInventario");
+        cargarComboInsumosMovimiento();
+    }//GEN-LAST:event_btnInventarioActionPerformed
+
+    private void btnRegistrarMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarMovimientoActionPerformed
+        int idx = cmbInsumosMovimiento.getSelectedIndex();
+        if (idx == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un insumo.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        modelo.entidad.Insumo ins = listaInsumosParaMovimiento.get(idx);
+
+        String cantidadStr = txtCantidadMovimiento.getText();
+        if (cantidadStr == null || cantidadStr.trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Ingrese una cantidad.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double cantidad;
+        try {
+            cantidad = Double.parseDouble(cantidadStr);
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Cantidad inválida.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (cantidad <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor que cero.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificar stock suficiente
+        if (ins.getStock_actual() < cantidad) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Stock insuficiente. Stock actual: " + ins.getStock_actual(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String tipo = cmbTipoMovimiento.getSelectedItem() != null ? cmbTipoMovimiento.getSelectedItem().toString() : "Consumo en Producción";
+
+        // Usuario: debes tener la referencia del usuario logueado en usuarioLogueado.
+        // Si no la tienes, por ahora usa new Usuario() con id 1 (mejor setearlo al hacer login).
+        modelo.entidad.Usuario usr = usuarioLogueado;
+        if (usr == null) {
+            // temporal: si no tienes login, usa id 1 (Admin)
+            usr = new modelo.entidad.Usuario();
+            usr.setId_usuario(1);
+        }
+
+        controlador.MovimientoCtrl movCtrl = new controlador.MovimientoCtrl();
+        boolean ok = movCtrl.registrarSalida(ins, cantidad, tipo, usr);
+
+        if (ok) {
+            // refrescar combo y cualquier tabla de insumos
+            cargarComboInsumosMovimiento();
+            // opcional: actualizar tabla general de insumos si existe
+            cargarTablaInsumos(); // si tienes este método ya creado
+            txtCantidadMovimiento.setText("");
+        }
+    }//GEN-LAST:event_btnRegistrarMovimientoActionPerformed
+
+    private void cmbInsumosMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbInsumosMovimientoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbInsumosMovimientoActionPerformed
+
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        java.awt.CardLayout layout = (java.awt.CardLayout) panelContenido.getLayout();
+        layout.show(panelContenido, "cardReportes");
+        configurarPanelReportes();
+        cargarTiposDeReporte();
+    }//GEN-LAST:event_btnReportesActionPerformed
+
+    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
+        String tipo = cmbTipoReporte.getSelectedItem().toString();
+
+        switch (tipo) {
+            case "Stock Actual" -> generarReporteStockActual();
+            case "Movimientos de Insumos" -> generarReporteMovimientos();
+            case "Insumos Próximos a Caducar" -> generarReporteCaducidad();
+        }
+
+    }//GEN-LAST:event_btnGenerarReporteActionPerformed
+
+    private void btnImprimirReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirReporteActionPerformed
+        try {
+            tablaReporte.print();
+        } catch (PrinterException e) { }
+    }//GEN-LAST:event_btnImprimirReporteActionPerformed
+
+    private void generarReporteCaducidad() {
+        InsumoCtrl ctrl = new InsumoCtrl();
+        List<Insumo> lista = ctrl.listarInsumosProximosACaducar();
+
+        String[] columnas = {"ID", "Nombre", "Stock", "Fecha Caducidad"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+        for (Insumo i : lista) {
+            modelo.addRow(new Object[]{
+                i.getId_insumo(),
+                i.getNombre(),
+                i.getStock_actual(),
+                i.getFecha_caducidad()
+            });
+        }
+
+        tablaReporte.setModel(modelo);
+    }
+
+    private void generarReporteMovimientos() {
+        Date ini = fechaInicio.getDate();
+        Date fin = fechaFin.getDate();
+
+        if (ini == null || fin == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un rango de fechas.");
+            return;
+        }
+
+        MovimientoCtrl ctrl = new MovimientoCtrl();
+        List<MovimientoInventario> lista = ctrl.listarMovimientosPorFecha(ini, fin);
+
+        String[] columnas = {"ID", "Insumo", "Cantidad", "Tipo", "Fecha", "Usuario"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+        for (MovimientoInventario m : lista) {
+            modelo.addRow(new Object[]{
+                m.getId_movimiento(),
+                (m.getInsumo() != null ? m.getInsumo().getNombre() : "—"),
+                m.getCantidad(),
+                m.getTipo_movimiento(),
+                m.getFecha_movimiento(),
+                (m.getUsuario() != null ? m.getUsuario().getNombres() : "—")
+            });
+        }
+
+        tablaReporte.setModel(modelo);
+    }
+
+    private void generarReporteStockActual() {
+        InsumoCtrl ctrl = new InsumoCtrl();
+        List<Insumo> lista = ctrl.listarInsumos();
+
+        String[] columnas = {"ID", "Nombre", "Unidad", "Stock Actual", "Stock Mínimo", "Estado"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+        for (Insumo i : lista) {
+            modelo.addRow(new Object[]{
+                i.getId_insumo(),
+                i.getNombre(),
+                i.getUnidad_medida(),
+                i.getStock_actual(),
+                i.getStock_minimo(),
+                i.getEstado()
+            });
+        }
+
+        tablaReporte.setModel(modelo);
+    }
+
     // Método para transformar botones normales en botones de menú estilo Dashboard
     private void aplicarEstiloMenu(javax.swing.JButton boton) {
-        
+
         java.awt.Color colorFondoNormal = new java.awt.Color(255, 204, 204); // rosado
         java.awt.Color colorFondoHover  = new java.awt.Color(255, 153, 153); // Rosado oscuro 
         java.awt.Color colorTexto       = new java.awt.Color(60, 63, 65);    // Gris oscuro
@@ -671,11 +1042,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         boton.setBorderPainted(false);
         boton.setFocusPainted(false);
         boton.setContentAreaFilled(true);
-        boton.setOpaque(true); 
+        boton.setOpaque(true);
         boton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         boton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        boton.setMargin(new java.awt.Insets(10, 20, 10, 0)); 
+        boton.setMargin(new java.awt.Insets(10, 20, 10, 0));
 
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -689,7 +1060,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public void diseñoTablaInsu(javax.swing.JTable tabla) {
         javax.swing.table.JTableHeader header = tabla.getTableHeader();
         header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
@@ -697,7 +1068,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         header.setForeground(new java.awt.Color(60, 60, 60));
         header.setOpaque(false);
 
-        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 153, 153))); 
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 153, 153)));
 
         // Filas
         tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
@@ -708,7 +1079,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         //Cuadriculas
         tabla.setShowVerticalLines(false);
         tabla.setShowHorizontalLines(true);
-        tabla.setGridColor(new java.awt.Color(230, 230, 230)); 
+        tabla.setGridColor(new java.awt.Color(230, 230, 230));
 
         if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
             javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tabla.getParent().getParent();
@@ -716,12 +1087,12 @@ public class MenuAdministrador extends javax.swing.JFrame {
             scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         }
     }
-    
+
     public void diseñoTablaProv(javax.swing.JTable tabla) {
         // Header
         javax.swing.table.JTableHeader header = tabla.getTableHeader();
         header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        header.setBackground(new java.awt.Color(204, 190, 235)); 
+        header.setBackground(new java.awt.Color(204, 190, 235));
         header.setForeground(new java.awt.Color(60, 60, 60));
         header.setOpaque(false);
 
@@ -730,7 +1101,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         //Filas
         tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
         tabla.setRowHeight(30);
-        tabla.setSelectionBackground(new java.awt.Color(245, 240, 255)); 
+        tabla.setSelectionBackground(new java.awt.Color(245, 240, 255));
         tabla.setSelectionForeground(new java.awt.Color(0, 0, 0));
 
         // Cuadriculas
@@ -744,12 +1115,12 @@ public class MenuAdministrador extends javax.swing.JFrame {
             scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         }
     }
-    
+
     //Metodo para los botones
     private void diseñoBotonModulo(javax.swing.JButton btn, java.awt.Color colorTema) {
         // colores estandar
         java.awt.Color colorEliminar = new java.awt.Color(255, 102, 102); // Rojo suave
-        java.awt.Color colorEditar   = new java.awt.Color(255, 165, 0);   // Naranja
+        java.awt.Color colorEditar = new java.awt.Color(255, 165, 0);   // Naranja
 
         // Decidir el color seguntexto
         java.awt.Color colorFinal;
@@ -777,13 +1148,14 @@ public class MenuAdministrador extends javax.swing.JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn.setBackground(colorFinal.darker()); // Oscurecer
             }
+
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn.setBackground(colorFinal); // Restaurar
             }
         });
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -820,14 +1192,25 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JButton btnEditarProveedor;
     private javax.swing.JButton btnEliminarInsumo;
     private javax.swing.JButton btnEliminarProveedor;
+    private javax.swing.JButton btnExportarReporte;
+    private javax.swing.JButton btnGenerarReporte;
+    private javax.swing.JButton btnImprimirReporte;
     private javax.swing.JButton btnInsumos;
     private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnPedidos;
     private javax.swing.JButton btnProduccion;
     private javax.swing.JButton btnProveedores;
+    private javax.swing.JButton btnRegistrarMovimiento;
     private javax.swing.JButton btnReportes;
+    private javax.swing.JComboBox<String> cmbInsumosMovimiento;
+    private javax.swing.JComboBox<String> cmbTipoMovimiento;
+    private javax.swing.JComboBox<String> cmbTipoReporte;
+    private com.toedter.calendar.JDateChooser fechaFin;
+    private com.toedter.calendar.JDateChooser fechaInicio;
     private javax.swing.JButton jButtonAgregarInsumo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -835,10 +1218,14 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableInsumos;
     private javax.swing.JTable jTableProveedores;
+    private javax.swing.JLabel lblStockDisponible;
     private javax.swing.JPanel paneInsumos;
     private javax.swing.JPanel panelContenido;
     private javax.swing.JPanel panelProveedores;
+    private javax.swing.JTable tablaReporte;
+    private javax.swing.JTextField txtCantidadMovimiento;
     // End of variables declaration//GEN-END:variables
 }

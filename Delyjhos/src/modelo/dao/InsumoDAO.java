@@ -187,7 +187,50 @@ public class InsumoDAO {
     }
 
     return null;
-}
+    }
+    
+    public boolean disminuirStock(int idInsumo, double cantidad) {
+        String sql = "UPDATE INSUMO SET stock_actual = stock_actual - ? WHERE id_insumo = ? AND stock_actual >= ?";
+        PreparedStatement stmt = null;
+        try {
+            stmt = cnn.prepareStatement(sql);
+            stmt.setDouble(1, cantidad);
+            stmt.setInt(2, idInsumo);
+            stmt.setDouble(3, cantidad);
+            int filas = stmt.executeUpdate();
+            return filas > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al disminuir stock: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (stmt != null) { stmt.close(); }
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public List<Insumo> listarInsumosProximosACaducar() {
+        List<Insumo> lista = new ArrayList<>();
+
+        // Caducan en menos de 30 días
+        String sql = "SELECT * FROM insumo WHERE fecha_caducidad <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)";
+
+        try (Connection cn = ConexionDB.getConnection(); PreparedStatement ps = cn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Insumo i = new Insumo();
+                i.setId_insumo(rs.getInt("id_insumo"));
+                i.setNombre(rs.getString("nombre"));
+                i.setStock_actual(rs.getDouble("stock_actual"));
+                i.setFecha_caducidad(rs.getDate("fecha_caducidad"));
+                lista.add(i);
+            }
+
+        } catch (Exception e) { }
+
+        return lista;
+    }
 
     
 }

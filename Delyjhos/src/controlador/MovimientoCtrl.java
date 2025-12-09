@@ -5,6 +5,7 @@
 package controlador;
 
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.dao.MovimientoInventarioDAO;
 import modelo.entidad.Insumo;
@@ -74,4 +75,38 @@ public class MovimientoCtrl {
         return registrarMovimiento(usuario, null, producto, "Venta", -cantidad);
     }
     
+    public boolean registrarSalida(Insumo insumo, double cantidad, String tipoMovimiento, Usuario usuario) {
+        if (insumo == null) {
+            JOptionPane.showMessageDialog(null, "Seleccione un insumo.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (cantidad <= 0) {
+            JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(null, "Usuario no identificado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        MovimientoInventario mov = new MovimientoInventario();
+        mov.setFecha_movimiento(new Date());
+        mov.setTipo_movimiento(tipoMovimiento);
+        mov.setCantidad(cantidad);
+        mov.setInsumo(insumo);
+        mov.setUsuario(usuario);
+        mov.setProducto(null);
+
+        boolean ok = movimientoDAO.agregarMovimiento(mov);
+        if (ok) {
+            JOptionPane.showMessageDialog(null, "Movimiento registrado exitosamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo registrar el movimiento (verifique stock).", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return ok;
+    }
+
+    public List<MovimientoInventario> listarMovimientosPorFecha(Date inicio, Date fin) {
+        return movimientoDAO.listarMovimientosPorFecha(inicio, fin);
+    }
 }

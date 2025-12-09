@@ -80,5 +80,9 @@ public class InsumoCtrl {
     public Insumo obtenerInsumoPorId(int id) {
         return insumoDAO.obtenerInsumoPorId(id);
     }
+    
+    public List<Insumo> listarInsumosProximosACaducar() {
+        return insumoDAO.listarInsumosProximosACaducar();
+    }
 
 }
