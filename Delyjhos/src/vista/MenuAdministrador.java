@@ -25,15 +25,30 @@ public class MenuAdministrador extends javax.swing.JFrame {
      */
     public MenuAdministrador() {
         initComponents();
+        diseñoTablaInsu(jTableInsumos);
+        diseñoTablaProv(jTableProveedores);
         cargarTablaInsumos();
         cargarTablaProveedores();
-        aplicarEstiloMenu(jButtonAgregarInsumo);
-        aplicarEstiloMenu(btnInsumos);   // Botón 2
+        aplicarEstiloMenu(btnInsumos);
+        aplicarEstiloMenu(btnProveedores);
         aplicarEstiloMenu(btnInventario);
         aplicarEstiloMenu(btnPedidos);
-        aplicarEstiloMenu(btnProveedores);
         aplicarEstiloMenu(btnProduccion);
         aplicarEstiloMenu(btnReportes);
+        //Botones
+        java.awt.Color temaInsumos = new java.awt.Color(255, 105, 180); // Rosado Fuerte
+        
+        diseñoBotonModulo(jButtonAgregarInsumo, temaInsumos);
+        diseñoBotonModulo(btnActualizar, temaInsumos);
+        diseñoBotonModulo(btnEditarInsumo, temaInsumos);
+        diseñoBotonModulo(btnEliminarInsumo, temaInsumos);
+
+        java.awt.Color temaProv = new java.awt.Color(147, 112, 219); // Lavanda
+        
+        diseñoBotonModulo(btnAgregarProveedor, temaProv);
+        diseñoBotonModulo(btnActualizarProveedor, temaProv);
+        diseñoBotonModulo(btnEditarProveedor, temaProv);
+        diseñoBotonModulo(btnEliminarProveedor, temaProv);
     }
 
     public void cargarTablaInsumos() {
@@ -112,14 +127,14 @@ public class MenuAdministrador extends javax.swing.JFrame {
         Logo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         panelContenido = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        paneInsumos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableInsumos = new javax.swing.JTable();
         jButtonAgregarInsumo = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
         btnEditarInsumo = new javax.swing.JButton();
         btnEliminarInsumo = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        panelProveedores = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableProveedores = new javax.swing.JTable();
         btnAgregarProveedor = new javax.swing.JButton();
@@ -132,7 +147,8 @@ public class MenuAdministrador extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1029, 750));
+        setResizable(false);
+        setSize(new java.awt.Dimension(1029, 750));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -226,9 +242,6 @@ public class MenuAdministrador extends javax.swing.JFrame {
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Logito.jpg"))); // NOI18N
-        jLabel1.setMaximumSize(new java.awt.Dimension(150, 150));
-        jLabel1.setMinimumSize(new java.awt.Dimension(150, 150));
-        jLabel1.setPreferredSize(new java.awt.Dimension(150, 150));
 
         javax.swing.GroupLayout LogoLayout = new javax.swing.GroupLayout(Logo);
         Logo.setLayout(LogoLayout);
@@ -281,7 +294,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         panelContenido.setBackground(new java.awt.Color(255, 255, 255));
         panelContenido.setLayout(new java.awt.CardLayout());
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        paneInsumos.setBackground(new java.awt.Color(255, 255, 255));
 
         jTableInsumos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -294,6 +307,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTableInsumos.setOpaque(false);
         jScrollPane1.setViewportView(jTableInsumos);
 
         jButtonAgregarInsumo.setText("Agregar Insumo");
@@ -303,10 +317,10 @@ public class MenuAdministrador extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("Actualizar");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnActualizarActionPerformed(evt);
             }
         });
 
@@ -324,39 +338,44 @@ public class MenuAdministrador extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout paneInsumosLayout = new javax.swing.GroupLayout(paneInsumos);
+        paneInsumos.setLayout(paneInsumosLayout);
+        paneInsumosLayout.setHorizontalGroup(
+            paneInsumosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paneInsumosLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(paneInsumosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(paneInsumosLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 806, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(49, Short.MAX_VALUE))
+                    .addGroup(paneInsumosLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
                         .addComponent(jButtonAgregarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(67, 67, 67)
+                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnEditarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 806, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(80, 80, 80)
+                        .addComponent(btnEliminarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69))))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        paneInsumosLayout.setVerticalGroup(
+            paneInsumosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paneInsumosLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(35, 35, 35)
+                .addGroup(paneInsumosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAgregarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addContainerGap(275, Short.MAX_VALUE))
         );
 
-        panelContenido.add(jPanel2, "cardInsumos");
+        panelContenido.add(paneInsumos, "cardInsumos");
+
+        panelProveedores.setBackground(new java.awt.Color(255, 255, 255));
 
         jTableProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -399,39 +418,41 @@ public class MenuAdministrador extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelProveedoresLayout = new javax.swing.GroupLayout(panelProveedores);
+        panelProveedores.setLayout(panelProveedoresLayout);
+        panelProveedoresLayout.setHorizontalGroup(
+            panelProveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProveedoresLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnAgregarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnActualizarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEditarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 806, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelProveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelProveedoresLayout.createSequentialGroup()
+                        .addComponent(btnAgregarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                        .addGap(34, 34, 34)
+                        .addComponent(btnActualizarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnEditarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnEliminarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                        .addGap(55, 55, 55))
+                    .addGroup(panelProveedoresLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 806, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(55, Short.MAX_VALUE))))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        panelProveedoresLayout.setVerticalGroup(
+            panelProveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProveedoresLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(40, 40, 40)
+                .addGroup(panelProveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnActualizarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(282, Short.MAX_VALUE))
+                .addContainerGap(269, Short.MAX_VALUE))
         );
 
-        panelContenido.add(jPanel3, "cardProveedores");
+        panelContenido.add(panelProveedores, "cardProveedores");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -517,9 +538,9 @@ public class MenuAdministrador extends javax.swing.JFrame {
         form.setVisible(true);
     }//GEN-LAST:event_jButtonAgregarInsumoActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         cargarTablaInsumos();
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEditarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarInsumoActionPerformed
         int fila = jTableInsumos.getSelectedRow();
@@ -645,7 +666,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
 
         boton.setBackground(colorFondoNormal);
         boton.setForeground(colorTexto);
-        boton.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        boton.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 12));
 
         boton.setBorderPainted(false);
         boton.setFocusPainted(false);
@@ -668,6 +689,101 @@ public class MenuAdministrador extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void diseñoTablaInsu(javax.swing.JTable tabla) {
+        javax.swing.table.JTableHeader header = tabla.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        header.setBackground(new java.awt.Color(255, 204, 204));
+        header.setForeground(new java.awt.Color(60, 60, 60));
+        header.setOpaque(false);
+
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 153, 153))); 
+
+        // Filas
+        tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        tabla.setRowHeight(30);
+        tabla.setSelectionBackground(new java.awt.Color(255, 228, 225));
+        tabla.setSelectionForeground(new java.awt.Color(0, 0, 0));
+
+        //Cuadriculas
+        tabla.setShowVerticalLines(false);
+        tabla.setShowHorizontalLines(true);
+        tabla.setGridColor(new java.awt.Color(230, 230, 230)); 
+
+        if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
+            javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tabla.getParent().getParent();
+            scroll.getViewport().setBackground(java.awt.Color.WHITE);
+            scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        }
+    }
+    
+    public void diseñoTablaProv(javax.swing.JTable tabla) {
+        // Header
+        javax.swing.table.JTableHeader header = tabla.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        header.setBackground(new java.awt.Color(204, 190, 235)); 
+        header.setForeground(new java.awt.Color(60, 60, 60));
+        header.setOpaque(false);
+
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(180, 160, 210)));
+
+        //Filas
+        tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        tabla.setRowHeight(30);
+        tabla.setSelectionBackground(new java.awt.Color(245, 240, 255)); 
+        tabla.setSelectionForeground(new java.awt.Color(0, 0, 0));
+
+        // Cuadriculas
+        tabla.setShowVerticalLines(false);
+        tabla.setShowHorizontalLines(true);
+        tabla.setGridColor(new java.awt.Color(235, 235, 235));
+
+        if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
+            javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tabla.getParent().getParent();
+            scroll.getViewport().setBackground(java.awt.Color.WHITE);
+            scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        }
+    }
+    
+    //Metodo para los botones
+    private void diseñoBotonModulo(javax.swing.JButton btn, java.awt.Color colorTema) {
+        // colores estandar
+        java.awt.Color colorEliminar = new java.awt.Color(255, 102, 102); // Rojo suave
+        java.awt.Color colorEditar   = new java.awt.Color(255, 165, 0);   // Naranja
+
+        // Decidir el color seguntexto
+        java.awt.Color colorFinal;
+        String texto = btn.getText().toLowerCase();
+
+        if (texto.contains("eliminar")) {
+            colorFinal = colorEliminar; // Siempre Rojo
+        } else if (texto.contains("editar")) {
+            colorFinal = colorEditar;   // Siempre Naranja
+        } else {
+            colorFinal = colorTema;
+        }
+
+        btn.setBackground(colorFinal);
+        btn.setForeground(java.awt.Color.WHITE); // Texto blanco
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setOpaque(true);
+
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setBackground(colorFinal.darker()); // Oscurecer
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setBackground(colorFinal); // Restaurar
+            }
+        });
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -696,6 +812,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Logo;
     private javax.swing.JPanel NavBar;
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnActualizarProveedor;
     private javax.swing.JButton btnAgregarProveedor;
     private javax.swing.JButton btnCerrarSesion;
@@ -709,12 +826,9 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JButton btnProduccion;
     private javax.swing.JButton btnProveedores;
     private javax.swing.JButton btnReportes;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButtonAgregarInsumo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -723,6 +837,8 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableInsumos;
     private javax.swing.JTable jTableProveedores;
+    private javax.swing.JPanel paneInsumos;
     private javax.swing.JPanel panelContenido;
+    private javax.swing.JPanel panelProveedores;
     // End of variables declaration//GEN-END:variables
 }

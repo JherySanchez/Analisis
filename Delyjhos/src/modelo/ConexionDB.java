@@ -28,7 +28,7 @@ public class ConexionDB {
                 // Establecer la conexión
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
                 
-                System.out.println("¡Conexion a bd_delyjhos EXITOSA!");
+                System.out.println("Conexion a bd_delyjhos EXITOSA!");
                 
             } catch (ClassNotFoundException | SQLException e) {
                 System.err.println("Error al conectar a la base de datos: " + e.getMessage());
