@@ -12,14 +12,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import modelo.ConexionDB;
+import modelo.entidad.Insumo;
 import modelo.entidad.MovimientoInventario;
+import modelo.entidad.Producto;
+import modelo.entidad.Usuario;
 
 /**
  *
  * @author jhery
  */
 public class MovimientoInventarioDAO {
-
+    
     private Connection cnn;
 
     public MovimientoInventarioDAO() {
@@ -27,91 +30,16 @@ public class MovimientoInventarioDAO {
     }
 
     /**
-     * Registra un movimiento y actualiza el stock correspondiente (Insumo o Producto)
-     * en una sola transacción.
-     * @param movimiento El objeto MovimientoInventario a registrar.
-     * @return true si la transacción fue exitosa, false si falló.
+     * Registra el movimiento y DESCUENTA el stock en una sola transacción segura.Usado por el módulo de Inventario.
+     * @param mov
+     * @return 
      */
-    public boolean registrarMovimiento(MovimientoInventario movimiento) {
-
-        String sqlMovimiento = "INSERT INTO MOVIMIENTO_INVENTARIO " + 
-                "(id_usuario, id_insumo, id_producto, fecha_movimiento, tipo_movimiento, cantidad) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-
-        String sqlActualizarStock = "";
-
-        PreparedStatement stmtMov = null;
-        PreparedStatement stmtStock = null;
-
-        try {
-            cnn.setAutoCommit(false);
-
-            stmtMov = cnn.prepareStatement(sqlMovimiento);
-            stmtMov.setInt(1, movimiento.getUsuario().getId_usuario());
-
-            if (movimiento.getInsumo() != null) {
-                stmtMov.setInt(2, movimiento.getInsumo().getId_insumo());
-                stmtMov.setNull(3, java.sql.Types.INTEGER);
-
-                sqlActualizarStock = "UPDATE INSUMO SET stock_actual = stock_actual " +
-                        (movimiento.getCantidad() > 0 ? "+ ?" : "- ?") + // Si es positivo (ej: compra) suma, si no (ej: consumo) resta
-                        " WHERE id_insumo = ?";
-
-            } else if (movimiento.getProducto() != null) {
-                stmtMov.setNull(2, java.sql.Types.INTEGER);
-                stmtMov.setInt(3, movimiento.getProducto().getId_producto());
-
-                sqlActualizarStock = "UPDATE PRODUCTO SET stock_actual = stock_actual " +
-                        (movimiento.getCantidad() > 0 ? "+ ?" : "- ?") + // Si es positivo (ej: producción) suma, si no (ej: venta) resta
-                        " WHERE id_producto = ?";
-            } else {
-                throw new SQLException("El movimiento debe estar asociado a un Insumo o un Producto.");
-            }
-
-            stmtMov.setDate(4, new java.sql.Date(movimiento.getFecha_movimiento().getTime()));
-            stmtMov.setString(5, movimiento.getTipo_movimiento());
-            stmtMov.setDouble(6, Math.abs(movimiento.getCantidad())); // Siempre guardamos la cantidad en positivo
-
-            stmtMov.executeUpdate();
-
-            stmtStock = cnn.prepareStatement(sqlActualizarStock);
-
-            stmtStock.setDouble(1, Math.abs(movimiento.getCantidad()));
-
-            if (movimiento.getInsumo() != null) {
-                stmtStock.setInt(2, movimiento.getInsumo().getId_insumo());
-            } else {
-                stmtStock.setInt(2, movimiento.getProducto().getId_producto());
-            }
-
-            stmtStock.executeUpdate();
-
-            cnn.commit();
-            return true;
-
-        } catch (SQLException e) {
-            System.err.println("Error al registrar movimiento: " + e.getMessage());
-            try {
-                System.err.println("Revertiendo transacción (Rollback)...");
-                cnn.rollback();
-            } catch (SQLException ex) {
-                System.err.println("Error al hacer rollback: " + ex.getMessage());
-            }
-            return false;
-        } finally {
-            try {
-                if (stmtMov != null) { stmtMov.close(); }
-                if (stmtStock != null) { stmtStock.close(); }
-                cnn.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.err.println("Error al cerrar recursos: " + e.getMessage());
-            }
-        }
-    }
-
-    public boolean agregarMovimiento(MovimientoInventario mov) {
-        String sqlInsertMov = "INSERT INTO MOVIMIENTO_INVENTARIO (fecha_movimiento, tipo_movimiento, cantidad, id_usuario, id_insumo, id_producto) VALUES (?, ?, ?, ?, ?, ?)";
-        String sqlActualizarStock = "UPDATE INSUMO SET stock_actual = stock_actual - ? WHERE id_insumo = ? AND stock_actual >= ?";
+    public boolean registrarMovimiento(MovimientoInventario mov) {
+        // Para guardar el historial
+        String sqlInsertMov = "INSERT INTO MOVIMIENTO_INVENTARIO (fecha_movimiento, tipo_movimiento, cantidad, id_usuario, id_insumo, id_producto) VALUES (NOW(), ?, ?, ?, ?, ?)";
+        
+        // Para descontar stock (Validando que no quede negativo)
+        String sqlUpdateStock = "UPDATE INSUMO SET stock_actual = stock_actual - ? WHERE id_insumo = ? AND stock_actual >= ?";
 
         PreparedStatement stmtMov = null;
         PreparedStatement stmtUpd = null;
@@ -119,37 +47,38 @@ public class MovimientoInventarioDAO {
         try {
             cnn.setAutoCommit(false);
 
-            // 1) Insertar movimiento
+            // Insertar movimiento
             stmtMov = cnn.prepareStatement(sqlInsertMov);
-            // si la columna fecha_movimiento tiene default CURRENT_TIMESTAMP puedes enviar null o la fecha:
-            java.sql.Timestamp ahora = new java.sql.Timestamp(mov.getFecha_movimiento().getTime());
-            stmtMov.setTimestamp(1, ahora);
-            stmtMov.setString(2, mov.getTipo_movimiento());
-            stmtMov.setDouble(3, mov.getCantidad());
-            stmtMov.setInt(4, mov.getUsuario().getId_usuario()); // asume usuario no null
+            stmtMov.setString(1, mov.getTipo_movimiento());
+            stmtMov.setDouble(2, mov.getCantidad());
+            stmtMov.setInt(3, mov.getUsuario().getId_usuario());
+            
+            // Manejo de Insumo vs Producto
             if (mov.getInsumo() != null) {
-                stmtMov.setInt(5, mov.getInsumo().getId_insumo());
+                stmtMov.setInt(4, mov.getInsumo().getId_insumo());
+                stmtMov.setNull(5, java.sql.Types.INTEGER);
+            } else if (mov.getProducto() != null) {
+                stmtMov.setNull(4, java.sql.Types.INTEGER);
+                stmtMov.setInt(5, mov.getProducto().getId_producto());
             } else {
+                stmtMov.setNull(4, java.sql.Types.INTEGER);
                 stmtMov.setNull(5, java.sql.Types.INTEGER);
             }
-            if (mov.getProducto() != null) {
-                stmtMov.setInt(6, mov.getProducto().getId_producto());
-            } else {
-                stmtMov.setNull(6, java.sql.Types.INTEGER);
-            }
+            
             stmtMov.executeUpdate();
 
-            // 2) Actualizar stock (solo si es movimiento sobre insumo y el tipo es de salida)
+            // Descontar stock al insumo
             if (mov.getInsumo() != null) {
-                stmtUpd = cnn.prepareStatement(sqlActualizarStock);
-                stmtUpd.setDouble(1, mov.getCantidad());
-                stmtUpd.setInt(2, mov.getInsumo().getId_insumo());
-                stmtUpd.setDouble(3, mov.getCantidad());
-                int filas = stmtUpd.executeUpdate();
-                if (filas == 0) {
-                    // No hay stock suficiente -> rollback y error
-                    cnn.rollback();
-                    return false;
+                stmtUpd = cnn.prepareStatement(sqlUpdateStock);
+                stmtUpd.setDouble(1, mov.getCantidad()); // Cuanto resta
+                stmtUpd.setInt(2, mov.getInsumo().getId_insumo()); // A quien
+                stmtUpd.setDouble(3, mov.getCantidad()); // Validacion: Stock actual >= cantidad
+                
+                int filasAfectadas = stmtUpd.executeUpdate();
+                
+                if (filasAfectadas == 0) {
+                    // Si entra aquí, es porque NO HAY STOCK SUFICIENTE
+                    throw new SQLException("Stock insuficiente para realizar la salida.");
                 }
             }
 
@@ -157,50 +86,93 @@ public class MovimientoInventarioDAO {
             return true;
 
         } catch (SQLException e) {
+            System.err.println("Error al registrar movimiento: " + e.getMessage());
             try {
                 cnn.rollback();
-            } catch (SQLException ex) {
-            }
-            System.err.println("Error en agregarMovimiento: " + e.getMessage());
+            } catch (SQLException ex) {}
             return false;
         } finally {
             try {
-                if (stmtMov != null) { stmtMov.close(); }
-                if (stmtUpd != null) { stmtUpd.close(); }
+                if (stmtMov != null) stmtMov.close();
+                if (stmtUpd != null) stmtUpd.close();
                 cnn.setAutoCommit(true);
-            } catch (SQLException e) {
-            }
+            } catch (SQLException e) {}
         }
     }
-    
-    // Aquí se podrían agregar métodos para listar movimientos (para reportes)
-    public List<MovimientoInventario> listarMovimientosPorFecha(Date inicio, Date fin) {
 
+    /**
+     * Lista los movimientos con los NOMBRES REALES (JOINs).Usado por el módulo de Reportes.
+     * @param fechaInicio
+     * @param fechaFin
+     * @return
+     */
+    public List<MovimientoInventario> listarMovimientosPorFecha(java.util.Date fechaInicio, java.util.Date fechaFin) {
         List<MovimientoInventario> lista = new ArrayList<>();
+        
+        // Esta consulta trae los nombres cruzando las tablas
+        String sql = "SELECT m.*, " +
+                     "       i.nombre AS nombre_insumo, " +
+                     "       p.nombre AS nombre_producto, " +
+                     "       u.usuario AS nombre_usuario " +
+                     "FROM MOVIMIENTO_INVENTARIO m " +
+                     "LEFT JOIN INSUMO i ON m.id_insumo = i.id_insumo " +
+                     "LEFT JOIN PRODUCTO p ON m.id_producto = p.id_producto " +
+                     "INNER JOIN USUARIO u ON m.id_usuario = u.id_usuario " +
+                     "WHERE DATE(m.fecha_movimiento) BETWEEN ? AND ? " +
+                     "ORDER BY m.fecha_movimiento DESC";
 
-        String sql = "SELECT * FROM MOVIMIENTO_INVENTARIO WHERE fecha_movimiento BETWEEN ? AND ?";
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-        try (PreparedStatement ps = cnn.prepareStatement(sql)) {
-
-            ps.setDate(1, new java.sql.Date(inicio.getTime()));
-            ps.setDate(2, new java.sql.Date(fin.getTime()));
-
-            ResultSet rs = ps.executeQuery();
+        try {
+            stmt = cnn.prepareStatement(sql);
+            stmt.setDate(1, new java.sql.Date(fechaInicio.getTime()));
+            stmt.setDate(2, new java.sql.Date(fechaFin.getTime()));
+            
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
-
-                MovimientoInventario mov = new MovimientoInventario();
-                mov.setId_movimiento(rs.getInt("id_movimiento"));
-                mov.setFecha_movimiento(rs.getTimestamp("fecha_movimiento"));
-                mov.setTipo_movimiento(rs.getString("tipo_movimiento"));
-                mov.setCantidad(rs.getDouble("cantidad"));
-
-                lista.add(mov);
+                MovimientoInventario m = new MovimientoInventario();
+                m.setId_movimiento(rs.getInt("id_movimiento"));
+                m.setFecha_movimiento(rs.getTimestamp("fecha_movimiento"));
+                m.setTipo_movimiento(rs.getString("tipo_movimiento"));
+                m.setCantidad(rs.getDouble("cantidad"));
+                
+                // Llenamos el Usuario con nombre
+                Usuario u = new Usuario();
+                u.setId_usuario(rs.getInt("id_usuario"));
+                u.setUsuario(rs.getString("nombre_usuario")); 
+                m.setUsuario(u);
+                
+                // Llenamos el Insumo con nombre (si existe)
+                int idInsumo = rs.getInt("id_insumo");
+                if (!rs.wasNull()) {
+                    Insumo i = new Insumo();
+                    i.setId_insumo(idInsumo);
+                    i.setNombre(rs.getString("nombre_insumo"));
+                    m.setInsumo(i);
+                }
+                
+                // Llenamos el Producto con nombre (si existe)
+                int idProd = rs.getInt("id_producto");
+                if (!rs.wasNull()) {
+                    Producto p = new Producto();
+                    p.setId_producto(idProd);
+                    p.setNombre(rs.getString("nombre_producto"));
+                    m.setProducto(p);
+                }
+                
+                lista.add(m);
             }
 
-        } catch (Exception e) { }
-
+        } catch (SQLException e) {
+            System.err.println("Error al listar movimientos: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {}
+        }
         return lista;
     }
-
 }

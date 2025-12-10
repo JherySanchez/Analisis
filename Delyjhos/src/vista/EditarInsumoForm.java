@@ -24,6 +24,7 @@ public class EditarInsumoForm extends javax.swing.JFrame {
 
     public EditarInsumoForm(int idInsumo, MenuAdministrador menu) {
         initComponents();
+        this.setLocationRelativeTo(null);
         this.idInsumo = idInsumo;
         this.menu = menu;
 

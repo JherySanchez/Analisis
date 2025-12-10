@@ -97,7 +97,7 @@ public class MovimientoCtrl {
         mov.setUsuario(usuario);
         mov.setProducto(null);
 
-        boolean ok = movimientoDAO.agregarMovimiento(mov);
+        boolean ok = movimientoDAO.registrarMovimiento(mov);
         if (ok) {
             JOptionPane.showMessageDialog(null, "Movimiento registrado exitosamente.");
         } else {

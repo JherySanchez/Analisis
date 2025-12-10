@@ -21,6 +21,7 @@ public class AgregarProveedorForm extends javax.swing.JFrame {
 
     public AgregarProveedorForm(MenuAdministrador menu) {
         initComponents();
+        this.setLocationRelativeTo(null);
         this.menu = menu;
     }
 
@@ -226,7 +227,7 @@ public class AgregarProveedorForm extends javax.swing.JFrame {
 
         if (proveedorCtrl.agregarProveedor(nombre, ruc, telefono, direccion, correo, estado)) {
 
-            menu.cargarTablaProveedores();
+            menu.cargarTablaProveedores("");
             this.dispose();
         }
     }//GEN-LAST:event_btnAgregarActionPerformed

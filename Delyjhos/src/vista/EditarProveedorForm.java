@@ -24,6 +24,7 @@ public class EditarProveedorForm extends javax.swing.JFrame {
 
     public EditarProveedorForm(int idProveedor, MenuAdministrador menu) {
         initComponents();
+        this.setLocationRelativeTo(null);
         this.idProveedor = idProveedor;
         this.menu = menu;
 
@@ -76,8 +77,7 @@ public class EditarProveedorForm extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(561, 430));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(255, 204, 204));
@@ -250,7 +250,7 @@ public class EditarProveedorForm extends javax.swing.JFrame {
         );
 
         if (ok) {
-            menu.cargarTablaProveedores();
+            menu.cargarTablaProveedores("");
             this.dispose();
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
