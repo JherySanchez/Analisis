@@ -4,6 +4,19 @@
  */
 package vista;
 
+import controlador.InsumoCtrl;
+import controlador.PedidoCtrl;
+import controlador.ProveedorCtrl;
+import java.awt.HeadlessException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modelo.entidad.Insumo;
+import modelo.entidad.Pedido;
+import modelo.entidad.PedidoDetalle;
+import modelo.entidad.Proveedor;
+
 /**
  *
  * @author Dayanna
@@ -11,12 +24,29 @@ package vista;
 public class CrearPedidoForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CrearPedidoForm.class.getName());
+    private DefaultTableModel modeloDetalle;
+    private List<PedidoDetalle> listaDetalles; // Lista temporal en memoria
+    private double totalPedido = 0.0;
+    private MenuAdministrador menuPadre;
 
     /**
      * Creates new form CrearPedidoForm
+     * @param menu
      */
-    public CrearPedidoForm() {
+    public CrearPedidoForm(MenuAdministrador menu) {
         initComponents();
+        this.menuPadre = menu;
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
+        listaDetalles = new ArrayList<>();
+        configurarTabla();
+        cargarCombos();
+        diseñoVentana();
+    }
+    
+    public CrearPedidoForm() {
+        this(null);
     }
 
     /**
@@ -28,22 +58,372 @@ public class CrearPedidoForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        cbProveedor = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        cbInsumo = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        txtCantidad = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtPrecio = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDetalle = new javax.swing.JTable();
+        lblTotal = new javax.swing.JLabel();
+        btnGuardar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel2.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel2.setForeground(new java.awt.Color(176, 224, 230));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("NUEVO PEDIDO");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+        );
+
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Selecciona el proveedor:");
+
+        cbProveedor.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Selecciona el insumo:");
+
+        cbInsumo.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel4.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Cantidad a pedir:");
+
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Precio Unitario");
+
+        tblDetalle.setBackground(new java.awt.Color(176, 224, 230));
+        tblDetalle.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(135, 206, 235)));
+        tblDetalle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        tblDetalle.setForeground(new java.awt.Color(0, 0, 0));
+        tblDetalle.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblDetalle.setOpaque(false);
+        jScrollPane1.setViewportView(tblDetalle);
+
+        lblTotal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTotal.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotal.setText("Total: S/. 0.00");
+
+        btnGuardar.setText("Guardar Pedido");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+
+        btnAgregar.setText("Agregar al Carrito");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(txtPrecio))
+                        .addGap(395, 395, 395))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbProveedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(56, 56, 56)
+                                .addComponent(lblTotal)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotal))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(21, 21, 21))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void configurarTabla() {
+        String[] columnas = {"ID Insumo", "Insumo", "Cantidad", "Precio Unit.", "Subtotal"};
+        modeloDetalle = new DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblDetalle.setModel(modeloDetalle);
+    }
+    
+    private void cargarCombos() {
+        // Cargar Proveedores
+        ProveedorCtrl provCtrl = new ProveedorCtrl();
+        List<Proveedor> proveedores = provCtrl.listarProveedores();
+        cbProveedor.removeAllItems();
+        for (Proveedor p : proveedores) {
+            cbProveedor.addItem(p); // El toString() de Proveedor debe devolver el nombre
+        }
+
+        // Cargar Insumos
+        InsumoCtrl insumoCtrl = new InsumoCtrl();
+        List<Insumo> insumos = insumoCtrl.listarInsumos();
+        cbInsumo.removeAllItems();
+        for (Insumo i : insumos) {
+            cbInsumo.addItem(i); // El toString() de Insumo debe devolver el nombre
+        }
+    }
+    
+    private void actualizarTotal() {
+        lblTotal.setText("Total: S/. " + String.format("%.2f", totalPedido));
+    }
+    
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (listaDetalles.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay insumos en el pedido.");
+            return;
+        }
+
+        try {
+            // Construir el objeto Pedido Cabecera
+            Pedido pedido = new Pedido();
+            Proveedor prov = (Proveedor) cbProveedor.getSelectedItem();
+            pedido.setProveedor(prov); // Asumiendo que tu entidad Pedido tiene setProveedor
+            // Si tu entidad Pedido usa setByIdProveedor, usa: pedido.setId_proveedor(prov.getId_proveedor());
+            
+            pedido.setTotal(totalPedido);
+            pedido.setEstado_pedido("Pendiente");
+
+            // Enviar al Controlador
+            PedidoCtrl ctrl = new PedidoCtrl();
+            boolean exito = ctrl.registrarPedido(pedido, listaDetalles);
+
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Pedido creado exitosamente");
+                if(menuPadre != null) {
+                    menuPadre.cargarTablaPedidos(); 
+                }
+                this.dispose(); // Cerrar ventana
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar en base de datos.");
+            }
+
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        try {
+            Insumo insumoSelec = (Insumo) cbInsumo.getSelectedItem();
+            int cantidad = Integer.parseInt(txtCantidad.getText());
+            double precio = Double.parseDouble(txtPrecio.getText());
+
+            if (cantidad <= 0 || precio <= 0) {
+                JOptionPane.showMessageDialog(this, "Cantidad y precio deben ser mayores a 0.");
+                return;
+            }
+
+            // Calcular Subtotal
+            double subtotal = cantidad * precio;
+
+            // Agregar a la lista lógica
+            PedidoDetalle detalle = new PedidoDetalle();
+            detalle.setInsumo(insumoSelec);
+            detalle.setCantidad(cantidad);
+            detalle.setPrecio_unitario(precio);
+            detalle.setSubtotal(subtotal);
+            
+            // Guardamos el nombre temporalmente para mostrarlo en tabla (aunque no va a BD)
+            // Ojo: PedidoDetalle no suele tener campo nombre, lo usamos solo para el modelo visual
+            
+            listaDetalles.add(detalle);
+
+            // Agregar a la tabla visual
+            modeloDetalle.addRow(new Object[]{
+                insumoSelec.getId_insumo(),
+                insumoSelec.getNombre(),
+                cantidad,
+                precio,
+                subtotal
+            });
+
+            // Actualizar total general
+            totalPedido += subtotal;
+            actualizarTotal();
+
+            // Limpiar campos pequeños
+            txtCantidad.setText("");
+            txtPrecio.setText("");
+            cbInsumo.requestFocus();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese números válidos en Cantidad y Precio.");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Error al agregar: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadActionPerformed
+
+    
+    private void diseñoVentana() {
+        // 1. Fondo Blanco
+        this.getContentPane().setBackground(java.awt.Color.WHITE);
+        // Si tienes un panel principal (ej. jPanel1), úsalo: jPanel1.setBackground(java.awt.Color.WHITE);
+
+        // 2. Estilo de la Tabla de Detalles (Reutilizamos el estilo azul)
+        javax.swing.JTable tabla = tblDetalle;
+        javax.swing.table.JTableHeader header = tabla.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+        header.setBackground(new java.awt.Color(153,255,255));
+        header.setForeground(new java.awt.Color(50, 50, 50));
+        header.setOpaque(false);
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(135, 206, 235)));
+
+        tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+        tabla.setRowHeight(28);
+        tabla.setSelectionBackground(new java.awt.Color(240, 255, 255));
+        tabla.setSelectionForeground(java.awt.Color.BLACK);
+        tabla.setShowVerticalLines(false);
+        tabla.setGridColor(new java.awt.Color(230, 230, 230));
+
+        if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
+            ((javax.swing.JScrollPane)tabla.getParent().getParent()).getViewport().setBackground(java.awt.Color.WHITE);
+            ((javax.swing.JScrollPane)tabla.getParent().getParent()).setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200,200,200)));
+        }
+
+        // 3. Estilo de Botones
+        estilizarBoton(btnAgregar, new java.awt.Color(100, 149, 237)); // Cornflower Blue
+        estilizarBoton(btnGuardar, new java.awt.Color(46, 204, 113)); // Verde para finalizar
+
+        // 4. Estilo del Label Total
+        lblTotal.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
+        lblTotal.setForeground(new java.awt.Color(25, 25, 112)); // Midnight Blue
+    }
+
+// Método auxiliar para botones (Copia simplificada del que tienes en Menu)
+    private void estilizarBoton(javax.swing.JButton btn, java.awt.Color color) {
+        btn.setBackground(color);
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        // Hover simple
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) { btn.setBackground(color.darker()); }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) { btn.setBackground(color); }
+        });
+    }
     /**
      * @param args the command line arguments
      */
@@ -70,5 +450,21 @@ public class CrearPedidoForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox<Object> cbInsumo;
+    private javax.swing.JComboBox<Object> cbProveedor;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JTable tblDetalle;
+    private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
 }

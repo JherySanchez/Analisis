@@ -23,43 +23,31 @@ public class PedidoCtrl {
         this.pedidoDAO = new PedidoDAO();
     }
 
-    public boolean agregarPedido(Proveedor proveedor, Date fecha, String estado, double total, List<PedidoDetalle> detalles) {
+    public boolean registrarPedido(Pedido pedido, List<PedidoDetalle> detalles) {
+        // Validaciones básicas
+        if (pedido.getProveedor() == null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar un proveedor.");
+            return false;
+        }
+        if (detalles.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "El pedido debe tener al menos un insumo.");
+            return false;
+        }
         
-        // Validación de datos
-        if (proveedor == null) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un proveedor.", "Error de Validacion", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        if (detalles == null || detalles.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "El pedido debe tener al menos un insumo.", "Error de Validacion", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        if (total <= 0) {
-            JOptionPane.showMessageDialog(null, "El total del pedido no puede ser cero o negativo.", "Error de Validacion", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        // Crear el objeto entidad (Cabecera)
-        Pedido pedido = new Pedido();
-        pedido.setProveedor(proveedor);
-        pedido.setFecha_pedido(fecha);
-        pedido.setEstado_pedido(estado);
-        pedido.setTotal(total);
-
-        // Llamar al Modelo (DAO)
-        if (pedidoDAO.agregarPedido(pedido, detalles)) {
-            JOptionPane.showMessageDialog(null, "Pedido agregado exitosamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al agregar el pedido.", "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+        return pedidoDAO.registrarPedido(pedido, detalles);
     }
 
     public List<Pedido> listarPedidos() {
         return pedidoDAO.listarPedidos();
     }
     
+    public boolean confirmarRecepcion(int idPedido, int idUsuario) {
+        return pedidoDAO.confirmarRecepcionPedido(idPedido, idUsuario);
+    }
+    
+    public List<PedidoDetalle> obtenerDetalles(int idPedido) {
+        return pedidoDAO.obtenerDetallesPedido(idPedido);
+    }
     // Aquí irían otros métodos, como:
     // - public List<PedidoDetalle> verDetalleDePedido(int idPedido) { ... }
     // - public boolean marcarPedidoComoRecibido(int idPedido) { ... }

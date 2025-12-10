@@ -4,6 +4,11 @@
  */
 package vista;
 
+import controlador.PedidoCtrl;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import modelo.entidad.PedidoDetalle;
+
 /**
  *
  * @author Dayanna
@@ -15,9 +20,20 @@ public class VerPedidoForm extends javax.swing.JFrame {
     /**
      * Creates new form VerPedidoForm
      */
+    public VerPedidoForm(int idPedido) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
+        lblTitulo.setText("Detalles del Pedido #" + idPedido);
+        cargarDetalles(idPedido);
+        disVentana();
+    }
+    
     public VerPedidoForm() {
         initComponents();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,22 +44,144 @@ public class VerPedidoForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDetalles = new javax.swing.JTable();
+        lblTitulo = new javax.swing.JLabel();
+        btnCerrar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
+
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+
+        tblDetalles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblDetalles);
+
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
+        lblTitulo.setText("Detalle del Pedido #");
+
+        btnCerrar.setText("Cerrar");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(192, 192, 192)
+                        .addComponent(lblTitulo))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(250, 250, 250)
+                        .addComponent(btnCerrar)))
+                .addContainerGap(52, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(lblTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCerrar)
+                .addGap(36, 36, 36))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void cargarDetalles(int idPedido) {
+        PedidoCtrl ctrl = new PedidoCtrl();
+        List<PedidoDetalle> lista = ctrl.obtenerDetalles(idPedido);
+
+        String[] columnas = {"Insumo", "Unidad", "Cantidad", "Precio Unit.", "Subtotal"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        for (PedidoDetalle d : lista) {
+            modelo.addRow(new Object[]{
+                d.getInsumo().getNombre(),        // Nombre del insumo
+                d.getInsumo().getUnidad_medida(), // Kg, Lt, etc.
+                d.getCantidad(),
+                "S/. " + d.getPrecio_unitario(),
+                "S/. " + d.getSubtotal()
+            });
+        }
+        tblDetalles.setModel(modelo);
+    }
+    
+    private void disVentana() {
+        this.getContentPane().setBackground(java.awt.Color.WHITE);
+        this.getRootPane().setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 206, 209), 2));
+        
+        javax.swing.JTable tabla = tblDetalles;
+        javax.swing.table.JTableHeader header = tabla.getTableHeader();
+        
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+        
+        header.setBackground(new java.awt.Color(153, 255, 255));
+        header.setForeground(new java.awt.Color(0, 0, 0));
+        header.setOpaque(false);
+        
+        // Borde inferior
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 206, 209)));
+
+        // Cuerpo de la tabla
+        tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+        tabla.setRowHeight(28);
+        // Seleccion
+        tabla.setSelectionBackground(new java.awt.Color(224, 255, 255)); 
+        tabla.setSelectionForeground(java.awt.Color.BLACK);
+        
+        tabla.setShowVerticalLines(false);
+        tabla.setGridColor(new java.awt.Color(200, 230, 230));
+
+        if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
+            javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tabla.getParent().getParent();
+            scroll.getViewport().setBackground(java.awt.Color.WHITE);
+            scroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
+        }
+        
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
+        lblTitulo.setForeground(new java.awt.Color(0, 139, 139)); // Texto "Dark Cyan" para combinar
+        
+        btnCerrar.setBackground(new java.awt.Color(240, 240, 240));
+        btnCerrar.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+        btnCerrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -70,5 +208,10 @@ public class VerPedidoForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JTable tblDetalles;
     // End of variables declaration//GEN-END:variables
 }

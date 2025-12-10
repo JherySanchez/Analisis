@@ -35,6 +35,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         diseñoTablaProv(jTableProveedores);
         diseñoTablaInve(tblInventario);
         diseñoTablaRepo(tablaReporte);
+        diseñoTablaPed(tblPedidos);
         tblInventario.setDefaultRenderer(Object.class, new InventarioRenderer());
         cargarTablaInventario(""); 
         cargarComboInsumosMovimiento();
@@ -43,6 +44,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         cargarTablaProveedores("");
         cargarTablaInventario(""); 
         cargarComboInsumosMovimiento();
+        cargarTablaPedidos();
         aplicarEstiloMenu(btnInsumos);
         aplicarEstiloMenu(btnProveedores);
         aplicarEstiloMenu(btnInventario);
@@ -131,6 +133,37 @@ public class MenuAdministrador extends javax.swing.JFrame {
         jTableProveedores.setModel(modelo);
         diseñoTablaProv(jTableProveedores);
     }
+    
+    
+    public void cargarTablaPedidos() {
+        controlador.PedidoCtrl ctrl = new controlador.PedidoCtrl();
+        List<modelo.entidad.Pedido> lista = ctrl.listarPedidos();
+
+        // Columnas
+        String[] columnas = {"ID", "Fecha", "Proveedor", "Total", "Estado"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        // Llenar filas
+        for (modelo.entidad.Pedido p : lista) {
+            modelo.addRow(new Object[]{
+                p.getId_pedido(),
+                p.getFecha_pedido(),
+                (p.getProveedor() != null) ? p.getProveedor().getNombre() : "Sin Proveedor",
+                "S/. " + p.getTotal(),
+                p.getEstado_pedido()
+            });
+        }
+
+        tblPedidos.setModel(modelo);
+
+        // Opcional: Dale estilo si quieres
+        // diseñoTablaInsu(tblPedidos); 
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -171,7 +204,13 @@ public class MenuAdministrador extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         txtBuscarProveedor = new javax.swing.JTextField();
-        jPanel4 = new javax.swing.JPanel();
+        panelPedidos = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tblPedidos = new javax.swing.JTable();
+        btnNuevoPedido = new javax.swing.JButton();
+        btnConfirmarRecepcion = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         panelReportes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaReporte = new javax.swing.JTable();
@@ -289,7 +328,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
 
         btnProduccion.setBackground(new java.awt.Color(255, 204, 204));
         btnProduccion.setForeground(new java.awt.Color(60, 63, 65));
-        btnProduccion.setText("Produccion");
+        btnProduccion.setText("Registrar Produccion");
         btnProduccion.setBorder(null);
         btnProduccion.setBorderPainted(false);
         btnProduccion.setFocusPainted(false);
@@ -347,12 +386,12 @@ public class MenuAdministrador extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 353, Short.MAX_VALUE)
                 .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -444,7 +483,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addContainerGap(331, Short.MAX_VALUE))
         );
 
         panelContenido.add(paneInsumos, "cardInsumos");
@@ -555,23 +594,100 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addComponent(btnActualizarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(192, Short.MAX_VALUE))
+                .addContainerGap(291, Short.MAX_VALUE))
         );
 
         panelContenido.add(panelProveedores, "cardProveedores");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 895, Short.MAX_VALUE)
+        panelPedidos.setBackground(new java.awt.Color(255, 255, 255));
+
+        tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPedidosMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(tblPedidos);
+
+        btnNuevoPedido.setBackground(new java.awt.Color(153, 255, 255));
+        btnNuevoPedido.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnNuevoPedido.setForeground(new java.awt.Color(0, 0, 0));
+        btnNuevoPedido.setText("Nuevo Pedido");
+        btnNuevoPedido.setBorder(null);
+        btnNuevoPedido.setOpaque(true);
+        btnNuevoPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoPedidoActionPerformed(evt);
+            }
+        });
+
+        btnConfirmarRecepcion.setBackground(new java.awt.Color(153, 255, 255));
+        btnConfirmarRecepcion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnConfirmarRecepcion.setForeground(new java.awt.Color(0, 0, 0));
+        btnConfirmarRecepcion.setText("Confirmar Recepcion");
+        btnConfirmarRecepcion.setBorder(null);
+        btnConfirmarRecepcion.setOpaque(true);
+        btnConfirmarRecepcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarRecepcionActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Gestionar Pedidos");
+
+        jLabel14.setText("Doble click para ver detalles");
+
+        javax.swing.GroupLayout panelPedidosLayout = new javax.swing.GroupLayout(panelPedidos);
+        panelPedidos.setLayout(panelPedidosLayout);
+        panelPedidosLayout.setHorizontalGroup(
+            panelPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPedidosLayout.createSequentialGroup()
+                .addGroup(panelPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel14)
+                    .addGroup(panelPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelPedidosLayout.createSequentialGroup()
+                            .addGap(236, 236, 236)
+                            .addComponent(jLabel12))
+                        .addGroup(panelPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelPedidosLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btnNuevoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54)
+                                .addComponent(btnConfirmarRecepcion))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPedidosLayout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 821, Short.MAX_VALUE)
+        panelPedidosLayout.setVerticalGroup(
+            panelPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPedidosLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(jLabel12)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
+                .addGroup(panelPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNuevoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConfirmarRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(331, Short.MAX_VALUE))
         );
 
-        panelContenido.add(jPanel4, "cardPedidos");
+        panelContenido.add(panelPedidos, "cardPedidos");
 
         panelReportes.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -720,7 +836,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addGroup(panelReportesLayout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(192, Short.MAX_VALUE))
+                        .addContainerGap(291, Short.MAX_VALUE))
                     .addGroup(panelReportesLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(panelReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -739,7 +855,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 821, Short.MAX_VALUE)
+            .addGap(0, 920, Short.MAX_VALUE)
         );
 
         panelContenido.add(jPanel7, "cardProduccion");
@@ -889,7 +1005,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         );
         panelInventarioLayout.setVerticalGroup(
             panelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(registro, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE)
+            .addComponent(registro, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
             .addGroup(panelInventarioLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
@@ -899,7 +1015,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addComponent(txtBuscarInventario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(277, Short.MAX_VALUE))
+                .addContainerGap(376, Short.MAX_VALUE))
         );
 
         panelContenido.add(panelInventario, "cardInventario");
@@ -926,7 +1042,8 @@ public class MenuAdministrador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInsumosActionPerformed
 
     private void btnPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidosActionPerformed
-        // TODO add your handling code here:
+        java.awt.CardLayout layout = (java.awt.CardLayout) panelContenido.getLayout();
+        layout.show(panelContenido, "cardPedidos");
     }//GEN-LAST:event_btnPedidosActionPerformed
 
     private void jButtonAgregarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarInsumoActionPerformed
@@ -1387,6 +1504,58 @@ public class MenuAdministrador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnExportarReporteActionPerformed
 
+    private void btnNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoPedidoActionPerformed
+        CrearPedidoForm form = new CrearPedidoForm(this);
+        form.setVisible(true);
+    }//GEN-LAST:event_btnNuevoPedidoActionPerformed
+
+    private void btnConfirmarRecepcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarRecepcionActionPerformed
+        int fila = tblPedidos.getSelectedRow();
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un pedido de la lista.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int idPedido = Integer.parseInt(tblPedidos.getValueAt(fila, 0).toString());
+        String estadoActual = tblPedidos.getValueAt(fila, 4).toString();
+
+        if ("Recibido".equalsIgnoreCase(estadoActual)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Este pedido ya fue procesado.", "Aviso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, 
+                "¿Confirmar llegada de mercadería?\nSe aumentará el stock de los insumos.", 
+                "Confirmar Recepción", 
+                javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            controlador.PedidoCtrl ctrl = new controlador.PedidoCtrl();
+
+            int idUsuario = 1; 
+
+            boolean ok = ctrl.confirmarRecepcion(idPedido, idUsuario);
+
+            if (ok) {
+                javax.swing.JOptionPane.showMessageDialog(this, "¡Recepción exitosa! Stock actualizado.");
+                cargarTablaPedidos(); // Refrescar la lista para ver el cambio a "Recibido"
+                cargarTablaInventario(""); 
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al procesar la recepción.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnConfirmarRecepcionActionPerformed
+
+    private void tblPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPedidosMouseClicked
+        if (evt.getClickCount() == 2) {
+        int fila = tblPedidos.getSelectedRow();
+        if (fila != -1) {
+            int idPedido = Integer.parseInt(tblPedidos.getValueAt(fila, 0).toString());
+            new VerPedidoForm(idPedido).setVisible(true);
+        }
+    }
+    }//GEN-LAST:event_tblPedidosMouseClicked
+
     private void generarReporteStockActual() {
         InsumoCtrl ctrl = new InsumoCtrl();
         List<Insumo> lista = ctrl.listarInsumos();
@@ -1632,6 +1801,38 @@ public class MenuAdministrador extends javax.swing.JFrame {
             scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         }
     }
+    
+    public void diseñoTablaPed(javax.swing.JTable tabla) {
+        // 1. Encabezado (Header)
+        javax.swing.table.JTableHeader header = tabla.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        // Fondo Azul Cielo Suave
+        header.setBackground(new java.awt.Color(153,255,255)); 
+        header.setForeground(new java.awt.Color(60, 60, 60));
+        header.setOpaque(false);
+
+        // Borde inferior Azul Acero
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(70, 130, 180)));
+
+        // 2. Cuerpo de la Tabla
+        tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        tabla.setRowHeight(30);
+        // Color de selección: Azul muy pálido (Alice Blue)
+        tabla.setSelectionBackground(new java.awt.Color(240, 248, 255)); 
+        tabla.setSelectionForeground(new java.awt.Color(0, 0, 0));
+
+        // Líneas
+        tabla.setShowVerticalLines(false);
+        tabla.setShowHorizontalLines(true);
+        tabla.setGridColor(new java.awt.Color(230, 240, 250));
+
+        // 3. Scroll blanco
+        if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
+            javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tabla.getParent().getParent();
+            scroll.getViewport().setBackground(java.awt.Color.WHITE);
+            scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        }
+    }
 
     //Metodo para los botones
     private void diseñoBotonModulo(javax.swing.JButton btn, java.awt.Color colorTema) {
@@ -1796,6 +1997,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizarProveedor;
     private javax.swing.JButton btnAgregarProveedor;
     private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnConfirmarRecepcion;
     private javax.swing.JButton btnEditarInsumo;
     private javax.swing.JButton btnEditarProveedor;
     private javax.swing.JButton btnEliminarInsumo;
@@ -1805,6 +2007,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JButton btnImprimirReporte;
     private javax.swing.JButton btnInsumos;
     private javax.swing.JButton btnInventario;
+    private javax.swing.JButton btnNuevoPedido;
     private javax.swing.JButton btnPedidos;
     private javax.swing.JButton btnProduccion;
     private javax.swing.JButton btnProveedores;
@@ -1819,7 +2022,9 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1831,23 +2036,25 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTableInsumos;
     private javax.swing.JTable jTableProveedores;
     private javax.swing.JLabel lblStockDisponible;
     private javax.swing.JPanel paneInsumos;
     private javax.swing.JPanel panelContenido;
     private javax.swing.JPanel panelInventario;
+    private javax.swing.JPanel panelPedidos;
     private javax.swing.JPanel panelProveedores;
     private javax.swing.JPanel panelReportes;
     private javax.swing.JPanel registro;
     private javax.swing.JTable tablaReporte;
     private javax.swing.JTable tblInventario;
+    private javax.swing.JTable tblPedidos;
     private javax.swing.JTextField txtBuscarInventario;
     private javax.swing.JTextField txtBuscarProveedor;
     private javax.swing.JTextField txtCantidadMovimiento;
