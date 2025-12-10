@@ -292,8 +292,8 @@ public class CrearPedidoForm extends javax.swing.JFrame {
             // Construir el objeto Pedido Cabecera
             Pedido pedido = new Pedido();
             Proveedor prov = (Proveedor) cbProveedor.getSelectedItem();
-            pedido.setProveedor(prov); // Asumiendo que tu entidad Pedido tiene setProveedor
-            // Si tu entidad Pedido usa setByIdProveedor, usa: pedido.setId_proveedor(prov.getId_proveedor());
+            pedido.setProveedor(prov);
+
             
             pedido.setTotal(totalPedido);
             pedido.setEstado_pedido("Pendiente");
@@ -307,7 +307,7 @@ public class CrearPedidoForm extends javax.swing.JFrame {
                 if(menuPadre != null) {
                     menuPadre.cargarTablaPedidos(); 
                 }
-                this.dispose(); // Cerrar ventana
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Error al guardar en base de datos.");
             }
@@ -331,19 +331,16 @@ public class CrearPedidoForm extends javax.swing.JFrame {
             // Calcular Subtotal
             double subtotal = cantidad * precio;
 
-            // Agregar a la lista lógica
+            // Agregar a la lista
             PedidoDetalle detalle = new PedidoDetalle();
             detalle.setInsumo(insumoSelec);
             detalle.setCantidad(cantidad);
             detalle.setPrecio_unitario(precio);
             detalle.setSubtotal(subtotal);
             
-            // Guardamos el nombre temporalmente para mostrarlo en tabla (aunque no va a BD)
-            // Ojo: PedidoDetalle no suele tener campo nombre, lo usamos solo para el modelo visual
-            
             listaDetalles.add(detalle);
 
-            // Agregar a la tabla visual
+            // Agregar a la tabla
             modeloDetalle.addRow(new Object[]{
                 insumoSelec.getId_insumo(),
                 insumoSelec.getNombre(),
@@ -352,11 +349,11 @@ public class CrearPedidoForm extends javax.swing.JFrame {
                 subtotal
             });
 
-            // Actualizar total general
+            // Actualizar total 
             totalPedido += subtotal;
             actualizarTotal();
 
-            // Limpiar campos pequeños
+            // Limpiar campos
             txtCantidad.setText("");
             txtPrecio.setText("");
             cbInsumo.requestFocus();
@@ -374,11 +371,8 @@ public class CrearPedidoForm extends javax.swing.JFrame {
 
     
     private void diseñoVentana() {
-        // 1. Fondo Blanco
         this.getContentPane().setBackground(java.awt.Color.WHITE);
-        // Si tienes un panel principal (ej. jPanel1), úsalo: jPanel1.setBackground(java.awt.Color.WHITE);
 
-        // 2. Estilo de la Tabla de Detalles (Reutilizamos el estilo azul)
         javax.swing.JTable tabla = tblDetalle;
         javax.swing.table.JTableHeader header = tabla.getTableHeader();
         header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
@@ -399,16 +393,13 @@ public class CrearPedidoForm extends javax.swing.JFrame {
             ((javax.swing.JScrollPane)tabla.getParent().getParent()).setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200,200,200)));
         }
 
-        // 3. Estilo de Botones
-        estilizarBoton(btnAgregar, new java.awt.Color(100, 149, 237)); // Cornflower Blue
-        estilizarBoton(btnGuardar, new java.awt.Color(46, 204, 113)); // Verde para finalizar
+        estilizarBoton(btnAgregar, new java.awt.Color(100, 149, 237)); // azulito
+        estilizarBoton(btnGuardar, new java.awt.Color(46, 204, 113)); // Verde
 
-        // 4. Estilo del Label Total
         lblTotal.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
-        lblTotal.setForeground(new java.awt.Color(25, 25, 112)); // Midnight Blue
+        lblTotal.setForeground(new java.awt.Color(25, 25, 112));
     }
 
-// Método auxiliar para botones (Copia simplificada del que tienes en Menu)
     private void estilizarBoton(javax.swing.JButton btn, java.awt.Color color) {
         btn.setBackground(color);
         btn.setForeground(java.awt.Color.WHITE);
@@ -416,7 +407,6 @@ public class CrearPedidoForm extends javax.swing.JFrame {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        // Hover simple
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) { btn.setBackground(color.darker()); }

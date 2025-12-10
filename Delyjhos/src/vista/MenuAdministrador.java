@@ -1803,30 +1803,27 @@ public class MenuAdministrador extends javax.swing.JFrame {
     }
     
     public void diseñoTablaPed(javax.swing.JTable tabla) {
-        // 1. Encabezado (Header)
         javax.swing.table.JTableHeader header = tabla.getTableHeader();
         header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        // Fondo Azul Cielo Suave
+
         header.setBackground(new java.awt.Color(153,255,255)); 
         header.setForeground(new java.awt.Color(60, 60, 60));
         header.setOpaque(false);
 
-        // Borde inferior Azul Acero
+
         header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(70, 130, 180)));
 
-        // 2. Cuerpo de la Tabla
+
         tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
         tabla.setRowHeight(30);
-        // Color de selección: Azul muy pálido (Alice Blue)
+
         tabla.setSelectionBackground(new java.awt.Color(240, 248, 255)); 
         tabla.setSelectionForeground(new java.awt.Color(0, 0, 0));
 
-        // Líneas
         tabla.setShowVerticalLines(false);
         tabla.setShowHorizontalLines(true);
         tabla.setGridColor(new java.awt.Color(230, 240, 250));
 
-        // 3. Scroll blanco
         if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
             javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tabla.getParent().getParent();
             scroll.getViewport().setBackground(java.awt.Color.WHITE);

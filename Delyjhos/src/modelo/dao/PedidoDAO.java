@@ -42,20 +42,18 @@ public class PedidoDAO {
         PreparedStatement psDetalle = null;
 
         try {
-            cnn.setAutoCommit(false); // INICIO TRANSACCIÓN
+            cnn.setAutoCommit(false);
 
-            // 1. Insertar Cabecera (PEDIDO)
             psPedido = cnn.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS);
             psPedido.setInt(1, pedido.getProveedor().getId_proveedor());
             psPedido.setDouble(2, pedido.getTotal());
-            psPedido.setString(3, "Pendiente"); // Estado inicial según Caso de Uso
+            psPedido.setString(3, "Pendiente");
             
             int filas = psPedido.executeUpdate();
             if (filas == 0) {
                 throw new SQLException("No se pudo guardar el pedido.");
             }
 
-            // 2. Obtener el ID generado del Pedido
             int idPedidoGenerado = -1;
             try (ResultSet rsKeys = psPedido.getGeneratedKeys()) {
                 if (rsKeys.next()) {
@@ -65,7 +63,6 @@ public class PedidoDAO {
                 }
             }
 
-            // 3. Insertar Detalles (Loop)
             psDetalle = cnn.prepareStatement(sqlDetalle);
             for (PedidoDetalle d : detalles) {
                 psDetalle.setInt(1, idPedidoGenerado);
@@ -73,16 +70,16 @@ public class PedidoDAO {
                 psDetalle.setInt(3, d.getCantidad());
                 psDetalle.setDouble(4, d.getPrecio_unitario());
                 psDetalle.setDouble(5, d.getSubtotal());
-                psDetalle.addBatch(); // Agregar al lote
+                psDetalle.addBatch();
             }
-            psDetalle.executeBatch(); // Ejecutar lote
+            psDetalle.executeBatch();
 
-            cnn.commit(); // CONFIRMAR TODO
+            cnn.commit();
             return true;
 
         } catch (SQLException e) {
             System.err.println("Error transacción pedido: " + e.getMessage());
-            try { cnn.rollback(); } catch (SQLException ex) {} // Deshacer si falla
+            try { cnn.rollback(); } catch (SQLException ex) {}
             return false;
         } finally {
             try {
@@ -144,55 +141,48 @@ public class PedidoDAO {
         ResultSet rsDetalles = null;
 
         try {
-            cnn.setAutoCommit(false); // 1. INICIO TRANSACCIÓN
+            cnn.setAutoCommit(false);
 
-            // A. Verificar que no haya sido recibido antes (Evitar stock duplicado)
             psVerif = cnn.prepareStatement(sqlVerificar);
             psVerif.setInt(1, idPedido);
             rs = psVerif.executeQuery();
             if (rs.next()) {
                 String estado = rs.getString("estado_pedido");
                 if ("Recibido".equalsIgnoreCase(estado)) {
-                    return false; // Ya estaba recibido, abortamos.
+                    return false;
                 }
             }
 
-            // B. Cambiar estado del Pedido a 'Recibido'
             psEstado = cnn.prepareStatement(sqlUpdateEstado);
             psEstado.setInt(1, idPedido);
             psEstado.executeUpdate();
 
-            // C. Obtener los insumos de este pedido
             psDetalles = cnn.prepareStatement(sqlGetDetalles);
             psDetalles.setInt(1, idPedido);
             rsDetalles = psDetalles.executeQuery();
 
-            // Preparamos las consultas repetitivas
             psStock = cnn.prepareStatement(sqlUpdateStock);
             psMov = cnn.prepareStatement(sqlInsertMov);
 
-            // D. Bucle: Por cada insumo del pedido...
             while (rsDetalles.next()) {
                 int idInsumo = rsDetalles.getInt("id_insumo");
                 int cantidad = rsDetalles.getInt("cantidad");
 
-                // 1. Aumentar Stock Real
                 psStock.setDouble(1, cantidad);
                 psStock.setInt(2, idInsumo);
                 psStock.executeUpdate();
 
-                // 2. Guardar en Historial (Movimientos)
                 psMov.setDouble(1, cantidad);
-                psMov.setInt(2, idUsuario); // Quién recibió la carga
+                psMov.setInt(2, idUsuario);
                 psMov.setInt(3, idInsumo);
                 psMov.executeUpdate();
             }
 
-            cnn.commit(); // 2. CONFIRMAR CAMBIOS (Éxito)
+            cnn.commit();
             return true;
 
         } catch (SQLException e) {
-            try { cnn.rollback(); } catch (SQLException ex) {} // Deshacer si falla
+            try { cnn.rollback(); } catch (SQLException ex) {}
             System.err.println("Error al recepcionar pedido: " + e.getMessage());
             return false;
         } finally {
@@ -234,7 +224,7 @@ public class PedidoDAO {
                     ins.setNombre(rs.getString("nombre"));
                     ins.setUnidad_medida(rs.getString("unidad_medida"));
                     
-                    det.setInsumo(ins); // Guardamos el objeto Insumo dentro del detalle
+                    det.setInsumo(ins); // Guardamos el objeto
                     
                     lista.add(det);
                 }
