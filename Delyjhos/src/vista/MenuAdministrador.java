@@ -8,6 +8,7 @@ import controlador.InsumoCtrl;
 import controlador.MovimientoCtrl;
 import controlador.ProveedorCtrl;
 import java.awt.print.PrinterException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -1256,9 +1257,81 @@ public class MenuAdministrador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerarReporteActionPerformed
 
     private void btnImprimirReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirReporteActionPerformed
+        if (tablaReporte.getRowCount() == 0) {
+        javax.swing.JOptionPane.showMessageDialog(this, "No hay datos para generar el documento.", "Tabla Vacía", javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+        }
+
         try {
-            tablaReporte.print();
-        } catch (PrinterException e) { }
+            java.io.File archivoPDF = java.io.File.createTempFile("Reporte_Delyjhos", ".html");
+
+            try (java.io.PrintWriter pw = new java.io.PrintWriter(archivoPDF)) {
+                pw.println("<html><head><title>Reporte Delyjhos</title>");
+                pw.println("<meta charset='UTF-8'>"); // Importante para tildes
+                pw.println("<style>");
+                pw.println("body { font-family: 'Segoe UI', sans-serif; padding: 40px; color: #333; }");
+
+                // Estilos del encabezado
+                pw.println("h1 { color: #d35400; text-align: center; margin-bottom: 5px; }");
+                pw.println("h3 { text-align: center; color: #555; margin-top: 0; }");
+                pw.println(".fecha { text-align: right; font-size: 12px; color: #777; margin-bottom: 20px; border-bottom: 2px solid #d35400; padding-bottom: 10px; }");
+
+                // Estilos de la tabla
+                pw.println("table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }");
+                pw.println("th { background-color: #ffe0b2; color: #d35400; padding: 12px; border: 1px solid #ddd; text-align: left; }");
+                pw.println("td { padding: 10px; border: 1px solid #ddd; }");
+                pw.println("tr:nth-child(even) { background-color: #fff8e1; }"); // Filas alternas color crema
+
+                // Boton flotante
+                pw.println(".btn-flotante { position: fixed; bottom: 30px; right: 30px; background-color: #d35400; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.3); cursor: pointer; border: none; font-size: 16px; transition: transform 0.2s; }");
+                pw.println(".btn-flotante:hover { transform: scale(1.05); background-color: #e67e22; }");
+
+                // Ocultar el boton al imprimir
+                pw.println("@media print { .no-print { display: none !important; } }");
+
+                pw.println("</style></head><body>");
+
+                // Boton de descarga
+                pw.println("<button onclick='window.print()' class='btn-flotante no-print'>🖨️ Guardar como PDF</button>");
+
+                // Contenido del Reporte
+                pw.println("<h1>🍰 Pastelería Delyjhos</h1>");
+                pw.println("<h3>Reporte Oficial: " + cmbTipoReporte.getSelectedItem().toString() + "</h3>");
+
+                // Fecha formateada
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd 'de' MMMM 'de' yyyy, HH:mm");
+                pw.println("<div class='fecha'>Generado el: " + sdf.format(new java.util.Date()) + "</div>");
+
+                // Tabla
+                pw.println("<table>");
+                pw.println("<thead><tr>");
+                for (int i = 0; i < tablaReporte.getColumnCount(); i++) {
+                    pw.println("<th>" + tablaReporte.getColumnName(i) + "</th>");
+                }
+                pw.println("</tr></thead>");
+
+                pw.println("<tbody>");
+                for (int i = 0; i < tablaReporte.getRowCount(); i++) {
+                    pw.println("<tr>");
+                    for (int j = 0; j < tablaReporte.getColumnCount(); j++) {
+                        Object val = tablaReporte.getValueAt(i, j);
+                        pw.println("<td>" + (val != null ? val.toString() : "") + "</td>");
+                    }
+                    pw.println("</tr>");
+                }
+                pw.println("</tbody></table>");
+
+                pw.println("<div style='margin-top: 30px; text-align: center; font-size: 12px; color: #aaa;'>Documento interno - Delyjhos Sistema v1.0</div>");
+                pw.println("</body></html>");
+            }
+
+            if (java.awt.Desktop.isDesktopSupported()) {
+                java.awt.Desktop.getDesktop().browse(archivoPDF.toURI());
+            }
+
+        } catch (IOException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+        }
     }//GEN-LAST:event_btnImprimirReporteActionPerformed
 
     private void txtBuscarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarInventarioActionPerformed
