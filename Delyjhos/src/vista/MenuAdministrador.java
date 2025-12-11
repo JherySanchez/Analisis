@@ -36,6 +36,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         diseñoTablaInve(tblInventario);
         diseñoTablaRepo(tablaReporte);
         diseñoTablaPed(tblPedidos);
+        diseñoTablaProd(tblProductos);
         tblInventario.setDefaultRenderer(Object.class, new InventarioRenderer());
         cargarTablaInventario(""); 
         cargarComboInsumosMovimiento();
@@ -45,6 +46,8 @@ public class MenuAdministrador extends javax.swing.JFrame {
         cargarTablaInventario(""); 
         cargarComboInsumosMovimiento();
         cargarTablaPedidos();
+        cargarTablaProductos();
+        cargarComboProduccion();
         aplicarEstiloMenu(btnInsumos);
         aplicarEstiloMenu(btnProveedores);
         aplicarEstiloMenu(btnInventario);
@@ -225,7 +228,17 @@ public class MenuAdministrador extends javax.swing.JFrame {
         fechaFin = new com.toedter.calendar.JDateChooser();
         btnGenerarReporte = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
+        panelProduccion = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblProductos = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
+        txtCantidadProduccion = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        cmbProductoProduccion = new javax.swing.JComboBox<>();
+        btnConfirmarProduccion = new javax.swing.JButton();
+        btnIrRecetas = new javax.swing.JButton();
         panelInventario = new javax.swing.JPanel();
         registro = new javax.swing.JPanel();
         cmbInsumosMovimiento = new javax.swing.JComboBox<>();
@@ -333,6 +346,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         btnProduccion.setBorderPainted(false);
         btnProduccion.setFocusPainted(false);
         btnProduccion.setOpaque(true);
+        btnProduccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProduccionActionPerformed(evt);
+            }
+        });
 
         btnCerrarSesion.setBackground(new java.awt.Color(255, 51, 51));
         btnCerrarSesion.setForeground(new java.awt.Color(0, 0, 0));
@@ -391,7 +409,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                 .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 353, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
                 .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -483,7 +501,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(331, Short.MAX_VALUE))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         panelContenido.add(paneInsumos, "cardInsumos");
@@ -594,7 +612,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addComponent(btnActualizarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(291, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         panelContenido.add(panelProveedores, "cardProveedores");
@@ -684,7 +702,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                 .addGroup(panelPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConfirmarRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(331, Short.MAX_VALUE))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         panelContenido.add(panelPedidos, "cardPedidos");
@@ -836,7 +854,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addGroup(panelReportesLayout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(291, Short.MAX_VALUE))
+                        .addContainerGap(115, Short.MAX_VALUE))
                     .addGroup(panelReportesLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(panelReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -847,19 +865,135 @@ public class MenuAdministrador extends javax.swing.JFrame {
 
         panelContenido.add(panelReportes, "cardReportes");
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 895, Short.MAX_VALUE)
+        panelProduccion.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel16.setText("Registrar Produccion");
+
+        tblProductos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane6.setViewportView(tblProductos);
+
+        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Acciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 18), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel18.setText("Cantidad a producir:");
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel17.setText("Producto Elaborado:");
+
+        cmbProductoProduccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProductoProduccionActionPerformed(evt);
+            }
+        });
+
+        btnConfirmarProduccion.setBackground(new java.awt.Color(160, 82, 45));
+        btnConfirmarProduccion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnConfirmarProduccion.setForeground(new java.awt.Color(255, 255, 255));
+        btnConfirmarProduccion.setText("Confirmar Produccion");
+        btnConfirmarProduccion.setBorderPainted(false);
+        btnConfirmarProduccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarProduccionActionPerformed(evt);
+            }
+        });
+
+        btnIrRecetas.setBackground(new java.awt.Color(205, 133, 63));
+        btnIrRecetas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnIrRecetas.setForeground(new java.awt.Color(0, 0, 0));
+        btnIrRecetas.setText("Configurar Recetas");
+        btnIrRecetas.setBorderPainted(false);
+        btnIrRecetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIrRecetasActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtCantidadProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(cmbProductoProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(60, 60, 60))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnIrRecetas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnConfirmarProduccion, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 920, Short.MAX_VALUE)
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cmbProductoProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtCantidadProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61)
+                .addComponent(btnConfirmarProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnIrRecetas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelContenido.add(jPanel7, "cardProduccion");
-        jPanel7.getAccessibleContext().setAccessibleName("");
+        javax.swing.GroupLayout panelProduccionLayout = new javax.swing.GroupLayout(panelProduccion);
+        panelProduccion.setLayout(panelProduccionLayout);
+        panelProduccionLayout.setHorizontalGroup(
+            panelProduccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProduccionLayout.createSequentialGroup()
+                .addGroup(panelProduccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelProduccionLayout.createSequentialGroup()
+                        .addGap(126, 126, 126)
+                        .addComponent(jLabel16))
+                    .addGroup(panelProduccionLayout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelProduccionLayout.setVerticalGroup(
+            panelProduccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProduccionLayout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel16)
+                .addGap(78, 78, 78)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(360, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        panelContenido.add(panelProduccion, "cardProduccion");
+        panelProduccion.getAccessibleContext().setAccessibleName("");
 
         panelInventario.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -917,15 +1051,15 @@ public class MenuAdministrador extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(registroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblStockDisponible, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbInsumosMovimiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbTipoMovimiento, 0, 173, Short.MAX_VALUE)
-                            .addComponent(txtCantidadMovimiento)
+                            .addComponent(cmbInsumosMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantidadMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(registroLayout.createSequentialGroup()
                                 .addGroup(registroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(cmbTipoMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(83, 83, 83))
         );
         registroLayout.setVerticalGroup(
@@ -1005,7 +1139,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         );
         panelInventarioLayout.setVerticalGroup(
             panelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(registro, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
+            .addComponent(registro, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
             .addGroup(panelInventarioLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
@@ -1015,7 +1149,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addComponent(txtBuscarInventario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(376, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
 
         panelContenido.add(panelInventario, "cardInventario");
@@ -1030,7 +1164,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -1556,6 +1690,60 @@ public class MenuAdministrador extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_tblPedidosMouseClicked
 
+    private void btnProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProduccionActionPerformed
+        java.awt.CardLayout layout = (java.awt.CardLayout) panelContenido.getLayout();
+        layout.show(panelContenido, "cardProduccion");
+
+        cargarTablaProductos();
+    }//GEN-LAST:event_btnProduccionActionPerformed
+
+    private void btnConfirmarProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarProduccionActionPerformed
+        int fila = tblProductos.getSelectedRow();
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un producto de la tabla.");
+            return;
+        }
+
+        int idProducto = Integer.parseInt(tblProductos.getValueAt(fila, 0).toString());
+        String nombreProd = tblProductos.getValueAt(fila, 1).toString();
+
+        // 2. Obtener cantidad
+        String cantStr = txtCantidadProduccion.getText();
+        int cantidad = 0;
+        try {
+            cantidad = Integer.parseInt(cantStr);
+            if (cantidad <= 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Ingrese una cantidad válida mayor a 0.");
+            return;
+        }
+
+        // 3. Ejecutar
+        int resp = javax.swing.JOptionPane.showConfirmDialog(this, 
+            "¿Producir " + cantidad + " unidades de '" + nombreProd + "'?\nSe descontarán insumos.", 
+            "Confirmar", javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (resp == javax.swing.JOptionPane.YES_OPTION) {
+            controlador.RecetaCtrl ctrl = new controlador.RecetaCtrl();
+            // ID usuario temporal (1) o logueado
+            if (ctrl.registrarProduccion(idProducto, cantidad, 1)) {
+                javax.swing.JOptionPane.showMessageDialog(this, "¡Producción registrada!");
+                txtCantidadProduccion.setText("");
+                cargarTablaProductos(); // Refrescar para ver el aumento de stock
+                cargarTablaInventario(""); // Refrescar insumos también
+            }
+        }
+    }//GEN-LAST:event_btnConfirmarProduccionActionPerformed
+
+    private void btnIrRecetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrRecetasActionPerformed
+        GestionarRecetas form = new GestionarRecetas();
+        form.setVisible(true);
+    }//GEN-LAST:event_btnIrRecetasActionPerformed
+
+    private void cmbProductoProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProductoProduccionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbProductoProduccionActionPerformed
+
     private void generarReporteStockActual() {
         InsumoCtrl ctrl = new InsumoCtrl();
         List<Insumo> lista = ctrl.listarInsumos();
@@ -1830,6 +2018,41 @@ public class MenuAdministrador extends javax.swing.JFrame {
             scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         }
     }
+    
+    public void diseñoTablaProd(javax.swing.JTable tabla) {
+        // 1. Encabezado (Header) - Tono Café con Leche
+        javax.swing.table.JTableHeader header = tabla.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+
+        // Color de fondo: Marrón claro (Tan)
+        header.setBackground(new java.awt.Color(210, 180, 140)); 
+        header.setForeground(new java.awt.Color(60, 30, 10)); // Texto Café Oscuro
+        header.setOpaque(false);
+
+        // Borde inferior: Chocolate
+        header.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(139, 69, 19))); 
+
+        // 2. Cuerpo de la Tabla
+        tabla.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        tabla.setRowHeight(30);
+
+        // Color al seleccionar: Crema Suave (Bisque)
+        tabla.setSelectionBackground(new java.awt.Color(255, 228, 196)); 
+        tabla.setSelectionForeground(new java.awt.Color(50, 20, 0)); // Texto Marrón muy oscuro
+
+        // Líneas de la cuadrícula: Color Trigo
+        tabla.setShowVerticalLines(false);
+        tabla.setShowHorizontalLines(true);
+        tabla.setGridColor(new java.awt.Color(245, 222, 179)); 
+
+        // 3. Arreglar fondo blanco del scroll
+        if (tabla.getParent() != null && tabla.getParent().getParent() instanceof javax.swing.JScrollPane) {
+            javax.swing.JScrollPane scroll = (javax.swing.JScrollPane) tabla.getParent().getParent();
+            scroll.getViewport().setBackground(java.awt.Color.WHITE);
+            scroll.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        }
+    }
+    
 
     //Metodo para los botones
     private void diseñoBotonModulo(javax.swing.JButton btn, java.awt.Color colorTema) {
@@ -1961,6 +2184,88 @@ public class MenuAdministrador extends javax.swing.JFrame {
             return c;
         }
     }
+    
+    public void cargarTablaProductos() {
+        controlador.ProductoCtrl ctrl = new controlador.ProductoCtrl();
+        java.util.List<modelo.entidad.Producto> lista = ctrl.listarProductos();
+
+        String[] columnas = {"ID", "Producto", "Precio", "Stock Listo", "Estado"};
+        
+        javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        for (modelo.entidad.Producto p : lista) {
+            modelo.addRow(new Object[]{
+                p.getId_producto(),
+                p.getNombre(),
+                "S/. " + p.getPrecio(),
+                p.getStock_actual(), // ¡Aquí ves el stock real!
+                p.getEstado()
+            });
+        }
+
+        tblProductos.setModel(modelo);
+        diseñoTablaProd(tblProductos); // Aplicar el estilo Chocolate/Verde
+    }
+    
+    public void cargarComboProduccion() {
+        controlador.ProductoCtrl ctrl = new controlador.ProductoCtrl();
+        java.util.List<modelo.entidad.Producto> lista = ctrl.listarProductos();
+        
+        cmbProductoProduccion.removeAllItems();
+        for (modelo.entidad.Producto p : lista) {
+            cmbProductoProduccion.addItem(p); 
+        }
+    }
+
+    // 2. Método para registrar la producción (Se conecta al botón Confirmar)
+    private void registrarProduccion() {
+        // Validaciones
+        modelo.entidad.Producto prod = (modelo.entidad.Producto) cmbProductoProduccion.getSelectedItem();
+        String cantStr = txtCantidadProduccion.getText();
+        
+        if (prod == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un producto.");
+            return;
+        }
+        
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(cantStr);
+            if (cantidad <= 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Ingrese una cantidad válida mayor a 0.");
+            return;
+        }
+
+        // Confirmación
+        int resp = javax.swing.JOptionPane.showConfirmDialog(this, 
+            "¿Confirmar producción de " + cantidad + " " + prod.getNombre() + "?\n" +
+            "Se descontarán los insumos del stock.", 
+            "Confirmar", javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (resp == javax.swing.JOptionPane.YES_OPTION) {
+            controlador.RecetaCtrl ctrl = new controlador.RecetaCtrl();
+            
+            // Usamos ID 1 si no tienes usuario logueado, o la variable usuarioLogueado
+            int idUsuario = (usuarioLogueado != null) ? usuarioLogueado.getId_usuario() : 1;
+            
+            boolean exito = ctrl.registrarProduccion(prod.getId_producto(), cantidad, idUsuario);
+            
+            if (exito) {
+                javax.swing.JOptionPane.showMessageDialog(this, "¡Producción registrada! Stock actualizado.");
+                txtCantidadProduccion.setText(""); // Limpiar campo
+                
+                // Actualizar otras tablas para ver el cambio reflejado al instante
+                cargarTablaInventario(""); 
+                cargarComboInsumosMovimiento(); // Si tienes el panel de inventario
+            }
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -1994,6 +2299,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizarProveedor;
     private javax.swing.JButton btnAgregarProveedor;
     private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnConfirmarProduccion;
     private javax.swing.JButton btnConfirmarRecepcion;
     private javax.swing.JButton btnEditarInsumo;
     private javax.swing.JButton btnEditarProveedor;
@@ -2004,6 +2310,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JButton btnImprimirReporte;
     private javax.swing.JButton btnInsumos;
     private javax.swing.JButton btnInventario;
+    private javax.swing.JButton btnIrRecetas;
     private javax.swing.JButton btnNuevoPedido;
     private javax.swing.JButton btnPedidos;
     private javax.swing.JButton btnProduccion;
@@ -2011,6 +2318,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarMovimiento;
     private javax.swing.JButton btnReportes;
     private javax.swing.JComboBox<String> cmbInsumosMovimiento;
+    private javax.swing.JComboBox<Object> cmbProductoProduccion;
     private javax.swing.JComboBox<String> cmbTipoMovimiento;
     private javax.swing.JComboBox<String> cmbTipoReporte;
     private com.toedter.calendar.JDateChooser fechaFin;
@@ -2023,6 +2331,9 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -2033,12 +2344,13 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTableInsumos;
     private javax.swing.JTable jTableProveedores;
     private javax.swing.JLabel lblStockDisponible;
@@ -2046,14 +2358,17 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JPanel panelContenido;
     private javax.swing.JPanel panelInventario;
     private javax.swing.JPanel panelPedidos;
+    private javax.swing.JPanel panelProduccion;
     private javax.swing.JPanel panelProveedores;
     private javax.swing.JPanel panelReportes;
     private javax.swing.JPanel registro;
     private javax.swing.JTable tablaReporte;
     private javax.swing.JTable tblInventario;
     private javax.swing.JTable tblPedidos;
+    private javax.swing.JTable tblProductos;
     private javax.swing.JTextField txtBuscarInventario;
     private javax.swing.JTextField txtBuscarProveedor;
     private javax.swing.JTextField txtCantidadMovimiento;
+    private javax.swing.JTextField txtCantidadProduccion;
     // End of variables declaration//GEN-END:variables
 }
