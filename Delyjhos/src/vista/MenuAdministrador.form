@@ -757,22 +757,23 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="jScrollPane3" min="-2" pref="819" max="-2" attributes="0"/>
-                                      <Group type="102" attributes="0">
-                                          <Component id="btnExportarReporte" min="-2" pref="97" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                          <Component id="btnImprimirReporte" min="-2" pref="97" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="btnExportarReporte" min="-2" pref="97" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                                  <Component id="btnImprimirReporte" min="-2" pref="97" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="251" max="-2" attributes="0"/>
-                                  <Component id="jLabel15" min="-2" pref="356" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane3" min="-2" pref="819" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="251" max="-2" attributes="0"/>
+                                      <Component id="jLabel15" min="-2" pref="356" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -786,21 +787,14 @@
                           <Component id="jLabel15" min="-2" pref="33" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane3" min="-2" pref="412" max="-2" attributes="0"/>
-                                  <EmptySpace pref="115" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="btnExportarReporte" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
-                                      <Component id="btnImprimirReporte" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
-                              </Group>
+                          <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                          <Component id="jScrollPane3" min="-2" pref="412" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="btnExportarReporte" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
+                              <Component id="btnImprimirReporte" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace pref="44" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1335,19 +1329,19 @@
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="34" max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="lblStockDisponible" alignment="1" max="32767" attributes="0"/>
-                                          <Component id="cmbInsumosMovimiento" min="-2" pref="173" max="-2" attributes="0"/>
-                                          <Component id="txtCantidadMovimiento" alignment="0" min="-2" pref="173" max="-2" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="cmbInsumosMovimiento" min="-2" pref="173" max="-2" attributes="0"/>
+                                                  <Component id="txtCantidadMovimiento" alignment="0" min="-2" pref="173" max="-2" attributes="0"/>
                                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel7" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
                                                   <Component id="jLabel8" min="-2" pref="74" max="-2" attributes="0"/>
+                                                  <Component id="cmbTipoMovimiento" alignment="0" min="-2" pref="173" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
                                           </Group>
-                                          <Component id="cmbTipoMovimiento" alignment="0" min="-2" pref="173" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
